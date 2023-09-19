@@ -1,0 +1,11 @@
+.company-name{ font-size: 40px; color: #22325E; font-weight: 600; padding: 20px 0 20px 20px;}
+.company-logo{ width: 200px;}
+.company-logo img{ width: 100%;}
+
+.blue-clr{ background: linear-gradient(60deg, #2B1BC4, #2115A1)!important;}
+.darkblue-clr{ background: linear-gradient(60deg, #3092EF, #2B86D4)!important;}
+.orange-clr{background: linear-gradient(60deg, #F7A812, #F6990C)!important;}
+
+.cardbg{ padding: 15x; color: #fff;}
+.cardbg h4{ color: #fff; padding: 20px 0 0 15px;}
+.cardbg p{ padding: 0px 0 0 15px;}
