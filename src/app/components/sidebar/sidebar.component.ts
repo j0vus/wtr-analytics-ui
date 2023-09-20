@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'app/core/services/auth.service';
+import { AppComponentBase } from 'app/core/shared/AppComponentBase';
+import { Router } from 'express';
 
 declare const $: any;
 declare interface RouteInfo {
@@ -14,7 +18,7 @@ export const ROUTES: RouteInfo[] = [
     { path: '/typography', title: 'Visitors',  icon:' person', class: '' },
     { path: '/maps', title: 'Location',  icon:'location_on', class: '' },
     { path: '/Settings', title: 'Settings',  icon:'settings', class: '' },
-    { path: '/logout', title: 'logout',  icon:'logout', class: '' },
+    // { path: '/logout', title: 'logout',  icon:'logout', class: '' },
   
 ];
 
@@ -23,10 +27,11 @@ export const ROUTES: RouteInfo[] = [
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent  implements OnInit {
   menuItems: any[];
 
-  constructor() { }
+  constructor(private auth:AuthService) {
+  }
 
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
@@ -37,4 +42,9 @@ export class SidebarComponent implements OnInit {
       }
       return true;
   };
+
+  onLogOut(){
+    this.auth.logout();
+    // console.log('logout');
+  }
 }

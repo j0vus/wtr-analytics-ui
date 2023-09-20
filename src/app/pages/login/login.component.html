@@ -1,0 +1,72 @@
+<div class="bg-light min-vh-100 d-flex flex-row align-items-center">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-body">
+              <form [formGroup]="logInForm" (ngSubmit)="onSubmit()">
+                <input type="hidden" name="utf8" value="&#x2713;" />
+                <input type="hidden" name="authenticity_token" value="" />
+                <h1 class="card-title">Login</h1>
+                <p class="card-text">Sign In to your account</p>
+                <div class="mb-3 input-group">
+                  <span class="input-group-text">
+                    <svg class="bi" width="16" height="16" fill="currentColor">
+                      <use xlink:href="#cilUser"></use>
+                    </svg>
+                  </span>
+                  <input
+                    autoComplete="username"
+                    class="form-control"
+                    placeholder="Username"
+                    formControlName="email"
+                    [ngClass]="{ 'is-invalid': submitedInValid && f['email'].invalid }"
+                  />
+                </div>
+                <div class="mb-4 input-group">
+                  <span class="input-group-text">
+                    <svg class="bi" width="16" height="16" fill="currentColor">
+                      <use xlink:href="#cilLockLocked"></use>
+                    </svg>
+                  </span>
+                  <input
+                    autoComplete="current-password"
+                    class="form-control"
+                    placeholder="Password"
+                    type="password"
+                    formControlName="password"
+                    [ngClass]="{ 'is-invalid': submitedInValid && f['password'].invalid }"
+                  />
+                </div>
+                <div class="row">
+                  <div class="col-xs-6">
+                    <button type="submit" class="btn btn-primary">
+                      Login
+                    </button>
+                  </div>
+                  <!-- <div class="col-xs-6 text-right">
+                    <a href="#" class="btn btn-link">Forgot password?</a>
+                  </div> -->
+                </div>
+              </form>
+            </div>
+          </div>
+          <!--
+          <div [ngStyle]="{'width.%': 44}" class="text-white bg-primary py-5 card">
+            <div class="card-body text-center">
+              <div>
+                <h2>Sign up</h2>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                  tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+                <a href="/register" class="btn btn-primary mt-3">Register Now!</a>
+              </div>
+            </div>
+          </div>
+          -->
+        </div>
+      </div>
+    </div>
+  </div>
+  

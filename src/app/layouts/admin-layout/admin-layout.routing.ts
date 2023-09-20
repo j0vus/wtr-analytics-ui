@@ -5,6 +5,7 @@ import { UserProfileComponent } from '../../user-profile/user-profile.component'
 import { TableListComponent } from '../../table-list/table-list.component';
 import { TypographyComponent } from '../../typography/typography.component';
 import { IconsComponent } from '../../icons/icons.component';
+import { AuthGuard } from 'app/core/guard/auth.guard';
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -51,8 +52,8 @@ export const AdminLayoutRoutes: Routes = [
     //     }]
     // }
     { path: 'dashboard',      component: DashboardComponent },
-    { path: 'user-profile',   component: UserProfileComponent },
-    { path: 'table-list',     component: TableListComponent },
+    { path: 'user-profile', canActivate: [AuthGuard],  component: UserProfileComponent },
+    { path: 'table-list',   canActivate: [AuthGuard],  component: TableListComponent },
     { path: 'typography',     component: TypographyComponent },
     { path: 'icons',          component: IconsComponent },
    
