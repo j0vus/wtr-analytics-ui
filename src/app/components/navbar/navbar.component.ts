@@ -1,16 +1,29 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Renderer2, ChangeDetectorRef, Injectable } from '@angular/core';
 import { ROUTES } from '../sidebar/sidebar.component';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
-import { Router } from '@angular/router';
-
+import { NavigationEnd, Router } from '@angular/router';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { SharedDataService } from 'app/core/services/shared/shared-data.service';
+import { event } from 'jquery';
+import { filter } from 'rxjs/operators';
+import {DateAdapter, MatNativeDateModule} from '@angular/material/core';
+import {
+  MatDateRangeSelectionStrategy,
+  DateRange,
+  MAT_DATE_RANGE_SELECTION_STRATEGY,
+  MatDatepickerModule,
+  MatDateSelectionModel,
+  MatDateRangePicker,
+} from '@angular/material/datepicker';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { Moment } from 'moment';
+import { MatInput } from '@angular/material/input';
 
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css'],
- 
- 
+  styleUrls: ['./navbar.component.css'], 
 })
 
 
@@ -21,10 +34,25 @@ export class NavbarComponent implements OnInit {
     private toggleButton: any;
     private sidebarVisible: boolean;
 
-    constructor(location: Location,  private element: ElementRef, private router: Router) {
+    @ViewChild('dateRangeInput') dateRangeInput: any;
+    @ViewChild('startDateInput') startDateInput: any;
+    @ViewChild('endDateInput') endDateInput: any;
+    @ViewChild('searchItems') searchItems: any;
+    @ViewChild(MatDateRangePicker)
+    picker: MatDateRangePicker<Moment>;
+
+    constructor(location: Location,  private element: ElementRef, private router: Router, private shareData: SharedDataService, private renderer: Renderer2, private chRef: ChangeDetectorRef, private fb:FormBuilder) {
       this.location = location;
           this.sidebarVisible = false;
     }
+
+    
+    resetPicker() {
+        this.picker.select(undefined);
+        this.startDateInput.select(undefined);
+        this.endDateInput.select(undefined);
+      }   
+  
 
     ngOnInit(){
       this.listTitles = ROUTES.filter(listTitle => listTitle);
@@ -38,7 +66,24 @@ export class NavbarComponent implements OnInit {
            this.mobile_menu_visible = 0;
          }
      });
+
+
+     //reset the date range  and search bar
+     this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd)
+      ).subscribe((event: NavigationEnd) => {
+        const newUrl = event.url;
+        console.log('URL changed to:', newUrl);
+        if(this.searchItems){
+            this.searchItems.nativeElement.value = '';
+            }
+        this.resetPicker();        
+
+      });
+    
+     
     }
+      
 
     sidebarOpen() {
         const toggleButton = this.toggleButton;
@@ -128,12 +173,43 @@ export class NavbarComponent implements OnInit {
       }
       return 'Dashboard';
     }
+
+    
+    selectedDateRange(){
+        const startDate = this.convertDateFormat(this.startDateInput.nativeElement.value);
+        const endDate = this.convertDateFormat(this.endDateInput.nativeElement.value);
+        
+        if(this.getTitle() !='Dashboard') {
+            const search = this.searchItems.nativeElement.value;
+            this.shareData.updateSharedData(this.getTitle() +":"+ startDate +":" + endDate + ":" + search);
+        } else {
+            this.shareData.updateSharedData(this.getTitle() +":"+ startDate +":" + endDate);
+        }
+        
+ }
+
+
+ convertDateFormat(inputDate: string): string {
+    const parts = inputDate.split('/');
+  
+    if (parts.length === 3) {
+      const month = parseInt(parts[0]);
+      const day = parseInt(parts[1]);
+      const year = parseInt(parts[2]);
+
+      const date = new Date(year, month - 1, day); 
+  
+      if (!isNaN(date.getTime())) {
+        const formattedDate = date.toISOString().split('T')[0];
+        return formattedDate;
+      }
+    }
+
+    return '';
+  }
+
+
 }
 
-
-
-
-
-/**  Date range picker forms integration */
 
 

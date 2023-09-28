@@ -1,23 +1,102 @@
 <nav class="navbar navbar-expand-lg navbar-transparent  navbar-absolute fixed-top">
-    <div class="container-fluid">
+    <!-- <div class="container-fluid">
         <div class="navbar-wrapper">
           <a class="navbar-brand" href="javascript:void(0)">{{getTitle()}}</a>
         </div>
-    
-     
-    </div>
+        
+        <form class="form-inline">
+          <input class="form-control mr-sm-2" type="search" (keydown.enter)="searchItem()" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-5 my-sm-2" type="submit">Search</button>
+        </form>
+      
+    </div> -->
 
+    <!-- <div  >
+    <mat-form-field>
+      <mat-label>Date Range</mat-label>
+      <mat-date-range-input [rangePicker]="picker1" #dateRangeInput1>
+        <mat-hint>start- end </mat-hint>
+        <input matStartDate placeholder="Start Date" #startDateInput1 />
+        <input matEndDate placeholder="End Date" #endDateInput1 />
+      </mat-date-range-input>
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="picker1"
+      ></mat-datepicker-toggle>
+      <mat-date-range-picker #picker1></mat-date-range-picker>
+    </mat-form-field>
+   
+      <button
+        type="button"
+        class="btn btn-secondary rounded-pill"
+      >
+        Apply
+      </button>
+  </div> -->
 
-
+<!--   
     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
       <div class="input-group input-group-outline">
         <label class="form-label">Search...</label>
         <input type="text" class="form-control" onfocus="focused(this)" onfocusout="defocused(this)">
       </div>
-    </div>
+    </div> -->
 
 
   
+    <div class="container-fluid">
+      <div class="navbar-wrapper">
+        <a class="navbar-brand" href="javascript:void(0)">{{ getTitle() }}</a>
+      </div>
+    
+      <div class="d-flex align-items-center"> <!-- Centered content -->
+        <div *ngIf="getTitle() !='Dashboard'">
+        <form class="form-inline  mb-2" >
+          <input class="form-control mr-sm-2" #searchItems type="search" placeholder="Search" aria-label="Search">
+        </form>
+       </div>
+
+       <!-- <div *ngIf="getTitle() !='Dashboard'">
+        <form class="form-inline  mb-2" >
+          <input class="form-control mr-sm-2" [(ngModel)]="searchItem"  type="search" placeholder="Search" aria-label="Search">
+        </form>
+       </div> -->
+
+        <!-- Add spacing between the search input and date range picker -->
+        <div class="ml-3"></div>
+    
+        <mat-form-field >
+          <mat-label>Date Range</mat-label>
+          <mat-date-range-input [rangePicker]="picker" #dateRangeInput>
+            <mat-hint>start- end </mat-hint>
+            <input matStartDate placeholder="Start Date" #startDateInput />
+            <input matEndDate placeholder="End Date" #endDateInput />
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker  #picker></mat-date-range-picker>
+        </mat-form-field>
+
+        <!-- Add spacing between the date range picker and the "Apply" button -->
+        <div class="ml-3"></div>
+    
+        <!-- <button style="transform: none !important;"
+          type="button"
+          (click)="selectedDateRange()"
+          class="btn btn-secondary rounded-pill"
+        >
+          Apply
+        </button> -->
+
+        <button
+          type="button"
+          (click)="selectedDateRange()" class="cus-btn-secondary cus-rounded-pill"
+        >
+          Apply
+        </button>
+        <div class="mr-3"></div>
+      </div>
+    </div>
+    
     
 
 

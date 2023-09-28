@@ -1,0 +1,23 @@
+.cus-btn-secondary.cus-rounded-pill {
+    /* Background color and text color */
+    background-color: #6c757d;
+    color: #fff;
+
+    /* Border */
+    border: 2px solid #6c757d;
+    border-radius: 50px; /* This creates the rounded-pill shape */
+
+    /* Padding */
+    padding: 0.5rem 1rem; /* Adjust padding as needed */
+
+    /* Hover state */
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.cus-btn-secondary.cus-rounded-pill:hover {
+    background-color: #5a6268; /* Change the background color on hover */
+    border-color: #545b62; /* Change the border color on hover */
+    color: #fff; /* Change text color on hover */
+}
+
+/* You can customize these styles further as needed */
