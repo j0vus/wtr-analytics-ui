@@ -27,6 +27,7 @@ export class DashBoardGOGChartData extends AppComponentBase  {
     companyTimeChartData : any [] = [];
     industryVisitChartData : any[] = [];
     industryTimeChartData : any[] = [];
+    allChartsDataMap = new Map();
 
     public sectorVisitChart : IChartProps = {};
     public sectorTimeChart : IChartProps = {};
@@ -49,7 +50,8 @@ export class DashBoardGOGChartData extends AppComponentBase  {
     this.apiService.get(AppConsts.industryVisitChart+ uri
         
     ).subscribe((res:any)=>{
-        this.industryVisitChartData= res;  
+        this.industryVisitChartData= res.body;  
+        this.allChartsDataMap.set('industryVisitChartData',res.status);
         const data =[] ;
 
         const columnNames = ['Company Name', 'Visit Count'];  
@@ -62,9 +64,7 @@ export class DashBoardGOGChartData extends AppComponentBase  {
             ]
             )
         });
-  
-        console.log(data);
-        
+    
         const  options = {  
             legend: 'none',  
             is3D: true,
@@ -102,8 +102,9 @@ export class DashBoardGOGChartData extends AppComponentBase  {
        this.apiService.get(AppConsts.industryTimeChart+ uri
     
     ).subscribe((res:any)=>{
-        this.industryTimeChartData= res;
-        //  console.log(this.industryTimeChartData);
+        this.industryTimeChartData= res.body;
+        this.allChartsDataMap.set('industryTimeChartData',res.status);
+
         const data =[] ;
         const columnNames = ['Company Name', 'Time Spend'];  
         data.unshift(columnNames);
@@ -115,8 +116,6 @@ export class DashBoardGOGChartData extends AppComponentBase  {
             ]
             )
         });
-
-        console.log(data);
         const  options = {  
             legend: 'none',  
             is3D: true,
@@ -153,9 +152,9 @@ export class DashBoardGOGChartData extends AppComponentBase  {
           uri
       )
       .subscribe((res: any) => {
-        this.companyTimeChartData = res;
-        // console.log(this.companyTimeChartData);
-  
+        this.companyTimeChartData = res.body;
+        this.allChartsDataMap.set('companyTimeChartData',res.status);
+
 
         const data =[] ;
         const columnNames = ['Company Ticker', 'Time Spend'];  
@@ -168,8 +167,6 @@ export class DashBoardGOGChartData extends AppComponentBase  {
             ]
             )
         });
-
-        console.log(data);
        
         const  options = {  
             legend: 'none',  
@@ -206,8 +203,8 @@ export class DashBoardGOGChartData extends AppComponentBase  {
           uri
       )
       .subscribe((res: any) => {
-        this.companyVisitChartData = res;
-        // console.log(this.companyVisitChartData);
+        this.companyVisitChartData = res.body;
+        this.allChartsDataMap.set('companyVisitChartData',res.status);
 
         const data =[] ;
         const columnNames = ['Company Tickers', 'Visit Count'];  
@@ -222,7 +219,6 @@ export class DashBoardGOGChartData extends AppComponentBase  {
             )
         });
 
-        console.log(data);
         const  options = {  
             legend: 'none',  
             is3D: true,

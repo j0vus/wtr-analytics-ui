@@ -1,16 +1,11 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AppConsts } from 'app/core/constants/appConstants';
 import { ApiService } from 'app/core/services/api/api.service';
 import { SharedDataService } from 'app/core/services/shared/shared-data.service';
-import { AppComponentBase } from 'app/core/shared/AppComponentBase';
 import * as Chartist from 'chartist';
-import { Router } from 'express';
-// import { DashBoardChartData } from './dashboard-chart-data';
-import { GoogleChartsModule } from 'angular-google-charts';
 import { DashBoardGOGChartData, IChartProps } from './dashboard-gogl-chart-data';
 import { DashBoardChartData } from './dashboard-chart-data';
-// import { DashBoardGChartData } from './dashboard-gCharts-data';
+import { Subject, Subscription, first, interval, takeUntil} from 'rxjs';
 
 
 
@@ -28,16 +23,27 @@ export class DashboardComponent implements OnInit {
     public companyVisitChart : IChartProps = {};
     public mainChartVisitor : IChartProps = {};
   
-    isGChart:boolean=false;
+    isGChart:boolean=true;
     isChartish: boolean=false;
-  dateRange: string = null;
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private shareDate: SharedDataService, private gChartsData: DashBoardGOGChartData, private chartsData: DashBoardChartData) {
+    dateRange: string = null;
+    private unsubscribe$ = new Subject<void>();
+    private intervalSubscription: Subscription | undefined;
+
+
+  constructor(private route: ActivatedRoute, private apiService: ApiService, private shareDate: SharedDataService, private gChartsData: DashBoardGOGChartData, private chartsData: DashBoardChartData, private ngZone: NgZone) {
 
     this.shareDate.sharedData$.subscribe((data) => {
       this.dateRange = data;
-      if(this.dateRange != null && this.dateRange.split(":")[0] === 'Dashboard')
-      this.initGCharts(this.dateRange);
-      // this.initCharts(this.dateRange);
+      if(this.dateRange != null && this.dateRange.split(":")[0] === 'Dashboard'){
+        if(this.isGChart){
+          this.initGCharts(this.dateRange);
+        } 
+        if(this.isChartish){
+          this.initCharts(this.dateRange);
+        }      
+      
+      }
+      
     });
 
   }
@@ -45,14 +51,18 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
 
     // chartist chart 
-    // this.initCharts(null);
-
+    if(this.isChartish){
+      this.initCharts(null);
+    }
     // google charts 
-    this.initGCharts(null);
+    if(this.isGChart){
+      this.initGCharts(null);
+    } 
+    
   }
 
   initCharts(dateRange: string){
-    this.isChartish= true;
+    // this.isChartish= true;
     let uri = this.uriPath(dateRange);
 
     this.chartsData.initIndustryVisitChart(uri);
@@ -88,7 +98,7 @@ export class DashboardComponent implements OnInit {
   }
 
  initGCharts(dateRange:string){
-   this.isGChart=true;
+  //  this.isGChart=true;
     let uri = this.uriPath(dateRange);
   
     this.gChartsData.initIndustryVisitChart(uri);
@@ -101,16 +111,43 @@ export class DashboardComponent implements OnInit {
     this.companyVisitChart=this.gChartsData.companyVisitChart;
     this.companyTimeChart= this.gChartsData.companyTimeChart;
     this.mainChartVisitor = this.gChartsData.mainChartVisitor;
-    
+  
     google.charts.load('current', {'packages': ['corechart']});
     // google.charts.load('current', {'packages': ['line']});
     google.charts.setOnLoadCallback(()=>{
-      setTimeout(()=>{
-        this.drawChart();
-      }, 180000 * 1); //3 minutes  
+     this.checkForDataArrival();
     });  
 
   }
+
+  checkForDataArrival(): void {
+      interval(1000)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        first((_) => this.gChartsData.allChartsDataMap.size === 4)
+      )
+      .subscribe(() => {
+        this.ngZone.run(() => {
+          const currentSize = this.gChartsData.allChartsDataMap.size;
+  
+          console.log(currentSize);
+          if (currentSize === 4) {
+            
+            this.drawChart();
+
+            this.unsubscribe$.next();
+            this.unsubscribe$.complete();
+
+            if (this.intervalSubscription) {
+              this.intervalSubscription.unsubscribe();
+            }
+            
+          }
+        });
+      });
+  }
+  
+  
 
   drawChart() {
     
@@ -127,6 +164,8 @@ export class DashboardComponent implements OnInit {
 
     var chart4 = new google.visualization.LineChart(document.getElementById('companyVisitedChart'));
     chart4.draw(google.visualization.arrayToDataTable(this.companyVisitChart.data),this.companyVisitChart.options);
+    this.gChartsData.allChartsDataMap.clear(); 
+
  }
 
  getCurrentDate(isPrevious: boolean, days: number): string {
@@ -199,5 +238,6 @@ export class DashboardComponent implements OnInit {
 
     seq2 = 0;
   };
+
 
 }

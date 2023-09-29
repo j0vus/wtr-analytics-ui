@@ -35,9 +35,8 @@ export class DashBoardChartData  {
     this.apiService.get(AppConsts.industryVisitChart+ uri
         
     ).subscribe((res:any)=>{
-        this.industryVisitChartData= res;
+        this.industryVisitChartData= res.body;
   
-        console.log(this.industryVisitChartData);
         const labels = this.industryVisitChartData.map((item)=>item.key);
         const data = this.industryVisitChartData.map((item)=>item.value);
   
@@ -71,8 +70,7 @@ export class DashBoardChartData  {
        this.apiService.get(AppConsts.industryTimeChart+ uri
     
     ).subscribe((res:any)=>{
-        this.industryTimeChartData= res;
-        console.log(this.industryTimeChartData);
+        this.industryTimeChartData= res.body;
         const labels = this.industryTimeChartData.map((item)=>item.key);
         const data = this.industryTimeChartData.map((item)=>item.value);
   
@@ -106,7 +104,7 @@ export class DashBoardChartData  {
           uri
       )
       .subscribe((res: any) => {
-        this.companyTimeChartData = res;
+        this.companyTimeChartData = res.body;
   
   
         const labels = this.companyTimeChartData.map((item) => item.key);
@@ -149,7 +147,7 @@ export class DashBoardChartData  {
           uri
       )
       .subscribe((res: any) => {
-        this.companyVisitChartData = res;
+        this.companyVisitChartData = res.body;
         const labels = this.companyVisitChartData.map((item) => item.key);
         const data = this.companyVisitChartData.map((item) => item.value);
   
