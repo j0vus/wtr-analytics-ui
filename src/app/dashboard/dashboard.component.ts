@@ -6,6 +6,8 @@ import * as Chartist from 'chartist';
 import { DashBoardGOGChartData, IChartProps } from './dashboard-gogl-chart-data';
 import { DashBoardChartData } from './dashboard-chart-data';
 import { Subject, Subscription, first, interval, takeUntil} from 'rxjs';
+import { AppComponent } from 'app/app.component';
+import { AppConsts } from 'app/core/constants/appConstants';
 
 
 
@@ -28,13 +30,19 @@ export class DashboardComponent implements OnInit {
     dateRange: string = null;
     private unsubscribe$ = new Subject<void>();
     private intervalSubscription: Subscription | undefined;
-
+    mostVisitedocByCountry:any;
 
   constructor(private route: ActivatedRoute, private apiService: ApiService, private shareDate: SharedDataService, private gChartsData: DashBoardGOGChartData, private chartsData: DashBoardChartData, private ngZone: NgZone) {
 
     this.shareDate.sharedData$.subscribe((data) => {
       this.dateRange = data;
       if(this.dateRange != null && this.dateRange.split(":")[0] === 'Dashboard'){
+
+        let uri = this.uriPath(this.dateRange);
+        this.apiService.getOnlyJson(AppConsts.mostViewedDocByCountry + uri).subscribe((res)=>{
+        this.mostVisitedocByCountry=res;  
+        });
+
         if(this.isGChart){
           this.initGCharts(this.dateRange);
         } 
@@ -58,7 +66,10 @@ export class DashboardComponent implements OnInit {
     if(this.isGChart){
       this.initGCharts(null);
     } 
-    
+    let uri = this.uriPath(null);
+    this.apiService.getOnlyJson(AppConsts.mostViewedDocByCountry + uri).subscribe((res)=>{
+    this.mostVisitedocByCountry=res;  
+    });
   }
 
   initCharts(dateRange: string){

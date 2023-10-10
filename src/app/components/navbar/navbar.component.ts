@@ -178,7 +178,6 @@ export class NavbarComponent implements OnInit {
     selectedDateRange(){
         const startDate = this.convertDateFormat(this.startDateInput.nativeElement.value);
         const endDate = this.convertDateFormat(this.endDateInput.nativeElement.value);
-        
         if(this.getTitle() !='Dashboard') {
             const search = this.searchItems.nativeElement.value;
             this.shareData.updateSharedData(this.getTitle() +":"+ startDate +":" + endDate + ":" + search);
@@ -198,9 +197,12 @@ export class NavbarComponent implements OnInit {
       const year = parseInt(parts[2]);
 
       const date = new Date(year, month - 1, day); 
-  
+
       if (!isNaN(date.getTime())) {
-        const formattedDate = date.toISOString().split('T')[0];
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
         return formattedDate;
       }
     }

@@ -8,14 +8,15 @@
                   
 
                     <div class="row">
-                        <div class="col-md-9 company-name">CANNABIS</div>
-                        <div class="col-md-12 company-logo"> <img src="/assets/img/Cannabis.jpg"/></div>
-
+                        <div class="col-md-9 company-name">{{sector.industryName}}</div>
+                        <!-- <div class="col-md-12 company-logo"> <img src="/assets/img/Cannabis.jpg"/></div> -->
+                        <div class="col-md-12 company-logo"> <img [src]="sector.imageIcon"/></div>
 
 
                     </div> 
 
-                    <p style="padding-top: 10px;">The cannabis research platform offers global coverage of public and private companies spanning cultivation, retail, manufacturing, hemp, and ancillary services. As more states transition to adult-use sales and other countries legalize cannabis, the sector is expected to grow at 15% annually over the next decade. Our platform helps investors navigate the complex and heavily regulated architecture and identify the best opportunities in the burgeoning cannabis industry.</p>
+                    <p style="padding-top: 10px;">{{sector.sectorOverview}}</p>
+                    <!-- <p style="padding-top: 10px;">The cannabis research platform offers global coverage of public and private companies spanning cultivation, retail, manufacturing, hemp, and ancillary services. As more states transition to adult-use sales and other countries legalize cannabis, the sector is expected to grow at 15% annually over the next decade. Our platform helps investors navigate the complex and heavily regulated architecture and identify the best opportunities in the burgeoning cannabis industry.</p> -->
                     
                   </div>
               </div>
@@ -25,7 +26,7 @@
             <div class="col-md-4">
                 <div class="card blue-clr cardbg">
 
-                    <h4>26k</h4>
+                    <h4>{{sectorDetails.totalViewers}}</h4>
                     <p>Total Viewers</p>
 
                     </div>
@@ -34,7 +35,7 @@
                     <div class="col-md-4">
                         <div class="card darkblue-clr cardbg">
         
-                            <h4>2.49</h4>
+                            <h4>{{sectorDetails.avgEngagementTime}}</h4>
                             <p>Average Engagement Time</p>
         
                             </div>
@@ -44,7 +45,7 @@
                             <div class="col-md-4">
                                 <div class="card orange-clr cardbg">
                 
-                                    <h4>245</h4>
+                                    <h4>{{sectorDetails.documentPublishedCount}}</h4>
                                     <p>Total published documents</p>
                 
                                     </div>
@@ -78,98 +79,27 @@
                                     Visitors
                                   </th>
                                   <th>
-                                      
 Avg. Eng. Time
                                   </th>
                               </thead>
                               <tbody>
-                                  <tr>
+                                  <tr *ngFor="let item of sectorDetails.secDocDetails">
                                       <td>
-                                        AD1245
+                                        {{item.docId}}
                                       </td>
                                       <td>
-                                        John Roy
+                                        {{item.analystName}}
                                       </td>
                                       <td>
-                                        14 August 2023
+                                        {{item.publishedDate}}
                                       </td>
                                       <td>
-                                          25
+                                          {{item.visitorCount}}
                                       </td>
                                       <td>
-                                        45 Minutes
+                                        {{item.avgTime}}
                                       </td>
                                   </tr>
-                                  <tr>
-                                    <td>
-                                      AD1245
-                                    </td>
-                                    <td>
-                                      John Roy
-                                    </td>
-                                    <td>
-                                      14 August 2023
-                                    </td>
-                                    <td>
-                                        25
-                                    </td>
-                                    <td>
-                                      45 Minutes
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                      AD1245
-                                    </td>
-                                    <td>
-                                      John Roy
-                                    </td>
-                                    <td>
-                                      14 August 2023
-                                    </td>
-                                    <td>
-                                        25
-                                    </td>
-                                    <td>
-                                      45 Minutes
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                      AD1245
-                                    </td>
-                                    <td>
-                                      John Roy
-                                    </td>
-                                    <td>
-                                      14 August 2023
-                                    </td>
-                                    <td>
-                                        25
-                                    </td>
-                                    <td>
-                                      45 Minutes
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                      AD1245
-                                    </td>
-                                    <td>
-                                      John Roy
-                                    </td>
-                                    <td>
-                                      14 August 2023
-                                    </td>
-                                    <td>
-                                        25
-                                    </td>
-                                    <td>
-                                      45 Minutes
-                                    </td>
-                                </tr>
                               </tbody>
                           </table>
                       </div>

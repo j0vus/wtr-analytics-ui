@@ -149,29 +149,11 @@
                               <th>Most Viewed City</th>
                           </thead>
                           <tbody>
-                              <tr>
-                                  <td>USA</td>
-                                  <td>25</td>
-                                  <td>Com-sec24</td>
-                                  <td>Oud-Turnhout</td>
-                              </tr>
-                              <tr>
-                                <td>Germany</td>
-                                  <td>25</td>
-                                  <td>Com-sec24</td>
-                                  <td>Oud-Turnhout</td>
-                              </tr>
-                              <tr>
-                                <td>Australia</td>
-                                <td>25</td>
-                                <td>Com-sec24</td>
-                                <td>Oud-Turnhout</td>
-                              </tr>
-                              <tr>
-                                <td>United Kingdom</td>
-                                <td>25</td>
-                                <td>Com-sec24</td>
-                                <td>Oud-Turnhout</td>
+                              <tr *ngFor="let item of mostVisitedocByCountry">
+                                  <td>{{item.country}}</td>
+                                  <td>{{item.documentTimeSpend}} </td>
+                                  <td>{{item.docId}}</td>
+                                  <td>{{item.city}}</td>
                               </tr>
                           </tbody>
                       </table>

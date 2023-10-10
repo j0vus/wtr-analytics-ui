@@ -39,6 +39,11 @@ export class ApiService {
     return this.http.get(environment.apiUrl + apiEndPoint, {headers:this.options.headers, observe: 'response'} ).pipe( catchError(async (error) => this.handleError(error)));
   }
 
+  getOnlyJson(apiEndPoint: string): Observable<any> {
+    this.getHeader();
+    return this.http.get(environment.apiUrl + apiEndPoint, this.options ).pipe( catchError(async (error) => this.handleError(error)));
+  }
+
 
   getWithCustomHeader(apiEndPoint: string, headers: HttpHeaders): Observable<any> {
     var options = {
