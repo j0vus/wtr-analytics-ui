@@ -8,24 +8,14 @@
                  
                   <div class="card-body" >
                   
-
                     <div class="row">
                         <div class="col-md-9 company-name">{{issuer.issuerName}}</div>
-
-                        <!-- <div class="col-md-3 company-logo"> <img src="/assets/img/Adtheorent-logo.png"/></div> -->
+                  
                         <div class="col-md-3 company-logo text-center"> <img [src]="issuer.logoURL"/></div>
-
-
 
                     </div>
 
-                    <p>{{issuer.description}}</p>
-                    <!-- <p>AdTheorent is a privacy-forward, machine-learning powered programmatic
-                         advertising company. Put simply, the company uses machine learning and data 
-                         science to target digital ads based on non-individualized predictive scores.
-                          Sophisticated data-driven advertisers who know digital and expect their digital
-                           campaigns to drive tangible business results are AdTheorent’s biggest clients.</p> -->
-                    
+                    <p>{{issuer.description | truncate: 500}}</p>                    
                   </div>
               </div>
           </div>
@@ -43,7 +33,7 @@
                     <div class="col-md-4">
                         <div class="card darkblue-clr cardbg">
         
-                            <h4>{{issuerDetails.avgEngagementTime}}</h4>
+                            <h4>{{issuerDetails.avgEngagementTime | nullToZero}}</h4>
                             <p>Average Engagement Time</p>
         
                             </div>
@@ -59,11 +49,6 @@
                                     </div>
                                     </div>
                     </div>
-
-
-
-
-
 
           <div class="col-md-12">
 
@@ -106,7 +91,7 @@ Avg. Eng. Time
                                         {{item.visitorCount}}
                                       </td>
                                       <td>
-                                        {{item.avgTime}}
+                                        {{item.avgTime | nullToZero}}
                                       </td>
                                   </tr>
                               </tbody>

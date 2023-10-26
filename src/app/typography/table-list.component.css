@@ -1,3 +1,14 @@
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+.cus-grid{
+    height: 100%;
+    width: 100%;
+    padding: 50px;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+}
+
 .company-name{ font-size: 40px; color: #22325E; font-weight: 600; padding: 20px 0 20px 20px;}
 .company-logo{ width: 200px;}
 .company-logo img{ width: 100%;}
@@ -9,3 +20,5 @@
 .cardbg{ padding: 15x; color: #fff;}
 .cardbg h4{ color: #fff; padding: 20px 0 0 15px;}
 .cardbg p{ padding: 0px 0 0 15px;}
+
+

@@ -2,6 +2,7 @@ import { Inject, Injectable } from "@angular/core";
 import { AppConsts } from "app/core/constants/appConstants";
 import { ApiService } from "app/core/services/api/api.service";
 import { AppComponentBase } from "app/core/shared/AppComponentBase";
+import { utilityMethods } from "app/core/shared/utility";
 import * as Chartist from "chartist";
 
 @Injectable({
@@ -14,6 +15,7 @@ export class DashBoardChartData  {
     companyTimeChartData : any [] = [];
     industryVisitChartData : any[] = [];
     industryTimeChartData : any[] = [];
+    mainVisitorChartData: any[]=[];
 
     sectorVisitChart : any;
     sectorTimeChart : any;
@@ -21,9 +23,11 @@ export class DashBoardChartData  {
     companyVisitChart : any;
     mainChartVisitor : any;
   
+    util:utilityMethods;
 
     constructor(private apiService: ApiService){
-        // let uri:string = `?endDate=${this.getCurrentDate(false,0)}&startDate=${this.getCurrentDate(true, 60)}`;   
+      this.util= new utilityMethods();
+        let uri:string = `?endDate=${this.util.getCurrentDate(false,0)}&startDate=${this.util.getCurrentDate(true, 60)}`;   
         // this.initIndustryVisitChart(uri);
         // this.initIndustryTimeChart(uri);
         // this.initCompanyVisitChart(uri);
@@ -177,13 +181,17 @@ export class DashBoardChartData  {
   
  
     initMainChart(uri:string) {
-        this.apiService.get(AppConsts.companyVisitChart + uri)
+        this.apiService.getOnlyJson(AppConsts.uniqueVisitors + uri)
         .subscribe((res:any)=>{
 
-            var datawebsiteViewsChart = {
-                labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+
+          const labels = this.mainVisitorChartData.map((item) => item.key);
+          const data = this.mainVisitorChartData.map((item) => item.value);
+
+            var dataVisitorCountData = {
+                labels: labels,
                 series: [
-                  [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
+                  data
         
                 ]
               }
@@ -201,25 +209,12 @@ export class DashBoardChartData  {
                 chartPadding: { top: 0, right: 0, bottom: 0, left: 0},
             }
           
-             this.mainChartVisitor = new Chartist.Line('#mainChartVisitor', datawebsiteViewsChart, optionscompanyVisitChart);
+             this.mainChartVisitor = new Chartist.Line('#mainChartVisitor', dataVisitorCountData, optionscompanyVisitChart);
           
           //   this.startAnimationForLineChart(companyVisitChart);
 
         });
         
     }
-
-    getCurrentDate(isPrevious: boolean, days: number): string {
-        const currentDate = new Date();
-        if (isPrevious) {
-          currentDate.setDate(currentDate.getDate() - days);
-        }
-        const year = currentDate.getFullYear();
-        const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-        const day = currentDate.getDate().toString().padStart(2, '0');
-    
-        // 2023-08-31 in this format
-        return `${year}-${month}-${day}`;
-      }
-     
+  
 }

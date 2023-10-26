@@ -18,7 +18,9 @@ export const ROUTES: RouteInfo[] = [
     { path: '/typography', title: 'Visitors',  icon:' person', class: '' },
     { path: '/maps', title: 'Location',  icon:'location_on', class: '' },
     { path: '/Settings', title: 'Settings',  icon:'settings', class: '' },
+    { path: '/visitor', title: 'Visitor Details', icon:'', class: ''}
     // { path: '/logout', title: 'logout',  icon:'logout', class: '' },
+
   
 ];
 
@@ -34,7 +36,7 @@ export class SidebarComponent  implements OnInit {
   }
 
   ngOnInit() {
-    this.menuItems = ROUTES.filter(menuItem => menuItem);
+    this.menuItems = ROUTES.filter(menuItem => menuItem.title !== 'Visitor Details');
   }
   isMobileMenu() {
       if ($(window).width() > 991) {

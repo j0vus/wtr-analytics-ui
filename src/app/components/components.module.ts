@@ -8,6 +8,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     MatNativeDateModule,
     MatDatepickerModule,
     MatFormFieldModule,
+    FormsModule
   ],
   declarations: [
     FooterComponent,

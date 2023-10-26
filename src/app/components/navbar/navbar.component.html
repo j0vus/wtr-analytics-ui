@@ -50,11 +50,20 @@
       </div>
     
       <div class="d-flex align-items-center"> <!-- Centered content -->
-        <div *ngIf="getTitle() !='Dashboard'">
+        <div *ngIf="showSearhBox">
         <form class="form-inline  mb-2" >
-          <input class="form-control mr-sm-2" #searchItems type="search" placeholder="Search" aria-label="Search">
+          <input class="form-control mr-sm-2" [(ngModel)]="searchTerm" (input)="onSearch()" #searchItems type="search" placeholder="Search" aria-label="Search">
         </form>
+        <div *ngIf="showDropdown" class="search-items">
+          <ul *ngIf="filteredData.length > 0" class="scrollable-list">
+            <li *ngFor="let item of filteredData" (click)="selectItem(item)">{{ item }}</li>
+          </ul>
+        </div>
        </div>
+
+        <!-- <div class="">
+          
+        </div> -->
 
        <!-- <div *ngIf="getTitle() !='Dashboard'">
         <form class="form-inline  mb-2" >
@@ -65,6 +74,7 @@
         <!-- Add spacing between the search input and date range picker -->
         <div class="ml-3"></div>
     
+        
         <mat-form-field >
           <mat-label>Date Range</mat-label>
           <mat-date-range-input [rangePicker]="picker" #dateRangeInput>
@@ -75,7 +85,7 @@
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-date-range-picker  #picker></mat-date-range-picker>
         </mat-form-field>
-
+    
         <!-- Add spacing between the date range picker and the "Apply" button -->
         <div class="ml-3"></div>
     
@@ -87,14 +97,16 @@
           Apply
         </button> -->
 
+      
         <button
           type="button"
           (click)="selectedDateRange()" class="cus-btn-secondary cus-rounded-pill"
         >
           Apply
         </button>
-        <div class="mr-3"></div>
       </div>
+        <div class="mr-3"></div>
+      
     </div>
     
     

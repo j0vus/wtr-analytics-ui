@@ -1,7 +1,50 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { AppConsts } from 'app/core/constants/appConstants';
 import { ApiService } from 'app/core/services/api/api.service';
 import { SharedDataService } from 'app/core/services/shared/shared-data.service';
+import { utilityMethods } from 'app/core/shared/utility';
+
+
+@Pipe({
+  name: 'nullToZero'
+})
+export class NullToZeroPipe implements PipeTransform {
+  transform(value: number | null): string {
+    if(value === null){
+      return value === null ? '0' : `${value}`;
+    } else {
+      let totalSeconds = Math.floor(value);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = Math.floor(totalSeconds % 60);
+
+      const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+      if (hours >= 1 ) {
+        return formattedTime;
+      } else if (minutes >= 1) {
+        return `${formattedTime}`;
+      } else {
+        return `${formattedTime}`;
+      }
+
+    }
+    
+  }
+}
+
+
+@Pipe({
+  name: 'truncate'
+})
+export class TruncatePipe implements PipeTransform {
+  transform(value: string, maxLength: number): string {
+    if (value.length > maxLength) {
+      return value.slice(0, maxLength) + '...'; 
+    }
+    return value; 
+  }
+}
 
 @Component({
   selector: 'app-table-list',
@@ -14,26 +57,29 @@ export class TableListComponent implements OnInit {
   allActiveCompanies:any ;
   issuer:any;
   issuerDetails:any;
+  util:utilityMethods;
   constructor(private apiService: ApiService, private shareDate: SharedDataService) {
+    this.util = new utilityMethods();
     this.shareDate.sharedData$.subscribe((data) => {
       this.dateRange = data;
       if(this.dateRange != null && this.dateRange.split(":")[0] === 'Companies'){   
         this.loadCompanies(this.dateRange);
       }
-      
     });
    }
 
   ngOnInit() {
-
+    this.shareDate.showSearchBox(true);
     this.apiService.getOnlyJson(AppConsts.issuersAll).subscribe((res)=>{
       this.allActiveCompanies = res;
+      let searchList = [...res];
       this.issuer=res[0];
-      let uri = this.uriPath(null, res[0].jissuerId);
+      let uri = this.util.uriPath(null, res[0].jissuerId, 'sectorId');
       this.apiService.getOnlyJson(AppConsts.companyDetails + uri).subscribe((data)=>{
       this.issuerDetails=data;
-      console.log(data);
       });
+      searchList.unshift("issuer");
+      this.shareDate.updateSearchItems(searchList);
      });
   }
 
@@ -42,67 +88,18 @@ export class TableListComponent implements OnInit {
    let searchItem = dateRange.split(":")[3];
    let issuerId:number;
 
-  for(let activeComapany of this.allActiveCompanies){
-    if(activeComapany.issuerName.toLowerCase() === searchItem.toLowerCase()){
-      // console.log(activeComapany.issuerName);
-      issuerId = activeComapany.jissuerId;
-      this.issuer = activeComapany;
-    }else {
-      for(let exchange of activeComapany.exchangeSecurities){
-        if(exchange.ticker.toLowerCase() === searchItem.toLowerCase()){
-          issuerId = activeComapany.jissuerId;
-          this.issuer=activeComapany;
-        }
+    for(let activeComapany of this.allActiveCompanies){
+      if(activeComapany.issuerName.toLowerCase() == searchItem.toLowerCase()){
+        issuerId = activeComapany.jissuerId;
+        this.issuer = activeComapany;
+        let uri = this.util.uriPath(dateRange,issuerId, 'sectorId');
+        this.apiService.getOnlyJson(AppConsts.companyDetails +uri).subscribe((data)=>{
+        this.issuerDetails=data;
+        });
+    
       }
     }
-
-    let uri = this.uriPath(dateRange,issuerId);
-    this.apiService.getOnlyJson(AppConsts.companyDetails +uri).subscribe((data)=>{
-    this.issuerDetails=data;
-    console.log(this.issuerDetails);
-    });
-
-  }
-   
-  if(issuerId != null){
-    console.log(issuerId);
-  } else {
-
-    // need to show an alert box 
-    console.log(issuerId +'do something');
-  }
-   
    
   }
-
-  uriPath(dateRange:string, issuerId:number):string{
-    let uri:string;
-    if(dateRange != null){
-      let date = this.dateRange.split(':');
-      if(date[1] != null && date[2] != null) {
-        uri= `?endDate=${date[2]}&sectorId=${issuerId}&startDate=${date[1]}`;   
-      } else {
-        uri = `?endDate=${this.getCurrentDate(false,0)}&sectorId=${issuerId}&startDate=${this.getCurrentDate(true, 30)}`;     
-      }
-
-    } else {
-      uri = `?endDate=${this.getCurrentDate(false,0)}&sectorId=${issuerId}&startDate=${this.getCurrentDate(true, 30)}`;   
-    }
-
-    return uri;
-  }
-
-  getCurrentDate(isPrevious: boolean, days: number): string {
-    const currentDate = new Date();
-    if (isPrevious) {
-      currentDate.setDate(currentDate.getDate() - days);
-    }
-    const year = currentDate.getFullYear();
-    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-    const day = currentDate.getDate().toString().padStart(2, '0');
-
-    // 2023-08-31 in this format
-    return `${year}-${month}-${day}`;
- }
 
 }

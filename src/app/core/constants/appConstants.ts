@@ -12,6 +12,10 @@ export class AppConsts {
     static readonly companyDetails ='analytics/getSectorDetails';
     static readonly sectorDetails ='analytics/getCompanyDetails';
     static readonly mostViewedDocByCountry ='analytics/getmostvieweddocumentbycountryandcity';
+    static readonly visitorsData ='analytics/getVisitors';
+    static readonly uniqueVisitors='analytics/getuniquevisitorsbydate';
+    static readonly visitorsCountByCountry = 'analytics/getVisitorsCount';
+    
 
 
     //POST Api's

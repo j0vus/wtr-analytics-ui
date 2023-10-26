@@ -6,6 +6,8 @@ import { TableListComponent } from '../../table-list/table-list.component';
 import { TypographyComponent } from '../../typography/typography.component';
 import { IconsComponent } from '../../icons/icons.component';
 import { AuthGuard } from 'app/core/guard/auth.guard';
+import { TopographyDetailsComponent } from 'app/typography/topography-details/topography-details.component';
+import { MapsComponent } from 'app/maps/maps.component';
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -56,5 +58,8 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'table-list',   canActivate: [AuthGuard],  component: TableListComponent },
     { path: 'typography',     component: TypographyComponent },
     { path: 'icons',          component: IconsComponent },
+    { path: 'visitor/:id', title: 'VisitorDetails', component: TopographyDetailsComponent },
+    { path: 'maps', component:MapsComponent }
+
    
 ];

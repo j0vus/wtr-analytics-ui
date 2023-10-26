@@ -8,6 +8,7 @@ import { DashBoardChartData } from './dashboard-chart-data';
 import { Subject, Subscription, first, interval, takeUntil} from 'rxjs';
 import { AppComponent } from 'app/app.component';
 import { AppConsts } from 'app/core/constants/appConstants';
+import { utilityMethods } from 'app/core/shared/utility';
 
 
 
@@ -31,14 +32,15 @@ export class DashboardComponent implements OnInit {
     private unsubscribe$ = new Subject<void>();
     private intervalSubscription: Subscription | undefined;
     mostVisitedocByCountry:any;
+    util:utilityMethods;
 
   constructor(private route: ActivatedRoute, private apiService: ApiService, private shareDate: SharedDataService, private gChartsData: DashBoardGOGChartData, private chartsData: DashBoardChartData, private ngZone: NgZone) {
-
+    this.util= new utilityMethods();
     this.shareDate.sharedData$.subscribe((data) => {
       this.dateRange = data;
       if(this.dateRange != null && this.dateRange.split(":")[0] === 'Dashboard'){
 
-        let uri = this.uriPath(this.dateRange);
+        let uri = this.util.uriPath(this.dateRange);
         this.apiService.getOnlyJson(AppConsts.mostViewedDocByCountry + uri).subscribe((res)=>{
         this.mostVisitedocByCountry=res;  
         });
@@ -58,6 +60,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.shareDate.showSearchBox(false);  
+
     // chartist chart 
     if(this.isChartish){
       this.initCharts(null);
@@ -66,15 +70,14 @@ export class DashboardComponent implements OnInit {
     if(this.isGChart){
       this.initGCharts(null);
     } 
-    let uri = this.uriPath(null);
+    let uri = this.util.uriPath(null);
     this.apiService.getOnlyJson(AppConsts.mostViewedDocByCountry + uri).subscribe((res)=>{
     this.mostVisitedocByCountry=res;  
     });
   }
 
   initCharts(dateRange: string){
-    // this.isChartish= true;
-    let uri = this.uriPath(dateRange);
+    let uri = this.util.uriPath(dateRange);
 
     this.chartsData.initIndustryVisitChart(uri);
     this.chartsData.initIndustryTimeChart(uri);
@@ -91,32 +94,16 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  uriPath(dateRange:string):string{
-    let uri:string;
-    if(dateRange != null){
-      let date = this.dateRange.split(':');
-      if(date[1] != null && date[2] != null) {
-        uri= `?endDate=${date[2]}&startDate=${date[1]}`;   
-      } else {
-        uri = `?endDate=${this.getCurrentDate(false,0)}&startDate=${this.getCurrentDate(true, 30)}`;     
-      }
-
-    } else {
-      uri = `?endDate=${this.getCurrentDate(false,0)}&startDate=${this.getCurrentDate(true, 30)}`;   
-    }
-
-    return uri;
-  }
-
+ 
  initGCharts(dateRange:string){
-  //  this.isGChart=true;
-    let uri = this.uriPath(dateRange);
+    let uri = this.util.uriPath(dateRange);
   
     this.gChartsData.initIndustryVisitChart(uri);
     this.gChartsData.initIndustryTimeChart(uri);
     this.gChartsData.initCompanyVisitChart(uri);
     this.gChartsData.initCompanyTimeChart(uri); 
     this.gChartsData.initMainChart(uri);
+
     this.sectorVisitChart=this.gChartsData.sectorVisitChart;
     this.sectorTimeChart= this.gChartsData.sectorTimeChart;
     this.companyVisitChart=this.gChartsData.companyVisitChart;
@@ -135,14 +122,14 @@ export class DashboardComponent implements OnInit {
       interval(1000)
       .pipe(
         takeUntil(this.unsubscribe$),
-        first((_) => this.gChartsData.allChartsDataMap.size === 4)
+        first((_) => this.gChartsData.allChartsDataMap.size === 5)
       )
       .subscribe(() => {
         this.ngZone.run(() => {
           const currentSize = this.gChartsData.allChartsDataMap.size;
   
           console.log(currentSize);
-          if (currentSize === 4) {
+          if (currentSize === 5) {
             
             this.drawChart();
 
@@ -175,21 +162,11 @@ export class DashboardComponent implements OnInit {
 
     var chart4 = new google.visualization.LineChart(document.getElementById('companyVisitedChart'));
     chart4.draw(google.visualization.arrayToDataTable(this.companyVisitChart.data),this.companyVisitChart.options);
+
+    var chart5 = new google.visualization.LineChart(document.getElementById('mainChartVisitor'));
+    chart5.draw(google.visualization.arrayToDataTable(this.mainChartVisitor.data),this.mainChartVisitor.options);
     this.gChartsData.allChartsDataMap.clear(); 
 
- }
-
- getCurrentDate(isPrevious: boolean, days: number): string {
-    const currentDate = new Date();
-    if (isPrevious) {
-      currentDate.setDate(currentDate.getDate() - days);
-    }
-    const year = currentDate.getFullYear();
-    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-    const day = currentDate.getDate().toString().padStart(2, '0');
-
-    // 2023-08-31 in this format
-    return `${year}-${month}-${day}`;
  }
 
   startAnimationForLineChart(chart){

@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminLayoutRoutes } from './admin-layout.routing';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
-import { TableListComponent } from '../../table-list/table-list.component';
+import { NullToZeroPipe, TableListComponent, TruncatePipe } from '../../table-list/table-list.component';
 import { TypographyComponent } from '../../typography/typography.component';
 import { IconsComponent } from '../../icons/icons.component';
 import { MapsComponent } from '../../maps/maps.component';
@@ -18,6 +18,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import { GoogleChartsModule } from 'angular-google-charts';
+import { AgGridModule } from 'ag-grid-angular';
+import { TopographyDetailsComponent } from 'app/typography/topography-details/topography-details.component';
+import { DateFormatPipe } from 'app/typography/topography-details/date-format-pipe.pipe';
 
 
 @NgModule({
@@ -33,7 +36,8 @@ import { GoogleChartsModule } from 'angular-google-charts';
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
-    GoogleChartsModule
+    GoogleChartsModule,
+    AgGridModule,
   ],
   declarations: [
     DashboardComponent,
@@ -44,6 +48,10 @@ import { GoogleChartsModule } from 'angular-google-charts';
     MapsComponent,
     NotificationsComponent,
     UpgradeComponent,
+    TopographyDetailsComponent,
+    DateFormatPipe,
+    NullToZeroPipe,
+    TruncatePipe,
   ],
   schemas:[
     CUSTOM_ELEMENTS_SCHEMA

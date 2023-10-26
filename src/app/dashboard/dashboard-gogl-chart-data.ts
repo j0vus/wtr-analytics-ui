@@ -2,6 +2,7 @@ import { Inject, Injectable, Injector } from "@angular/core";
 import { AppConsts } from "app/core/constants/appConstants";
 import { ApiService } from "app/core/services/api/api.service";
 import { AppComponentBase } from "app/core/shared/AppComponentBase";
+import { utilityMethods } from "app/core/shared/utility";
 import * as Chartist from "chartist";
 
 
@@ -27,6 +28,7 @@ export class DashBoardGOGChartData extends AppComponentBase  {
     companyTimeChartData : any [] = [];
     industryVisitChartData : any[] = [];
     industryTimeChartData : any[] = [];
+    mainChartVisitorData : any[] =[];
     allChartsDataMap = new Map();
 
     public sectorVisitChart : IChartProps = {};
@@ -34,11 +36,13 @@ export class DashBoardGOGChartData extends AppComponentBase  {
     public companyTimeChart : IChartProps = {};
     public companyVisitChart : IChartProps = {};
     public mainChartVisitor : IChartProps = {};
-  
+
+    util:utilityMethods;
 
     constructor(injector: Injector){
       super(injector);
-        // let uri:string = `?endDate=${this.getCurrentDate(false,0)}&startDate=${this.getCurrentDate(true, 60)}`;   
+      this.util= new utilityMethods();
+        // let uri:string = `?endDate=${this.util.getCurrentDate(false,0)}&startDate=${this.util.getCurrentDate(true, 60)}`;   
         // this.initIndustryVisitChart(uri);
         // this.initIndustryTimeChart(uri);
         // this.initCompanyVisitChart(uri);
@@ -52,9 +56,9 @@ export class DashBoardGOGChartData extends AppComponentBase  {
     ).subscribe((res:any)=>{
         this.industryVisitChartData= res.body;  
         this.allChartsDataMap.set('industryVisitChartData',res.status);
-        const data =[] ;
+        let data =[] ;
 
-        const columnNames = ['Company Name', 'Visit Count'];  
+        const columnNames = ['Company Name', 'Visitors'];  
         data.unshift(columnNames);
 
         this.industryVisitChartData.forEach((item)=>{
@@ -80,8 +84,14 @@ export class DashBoardGOGChartData extends AppComponentBase  {
             dataOpacity: 0.5,
             // lineWidth:7,
             colors:['red'],
-
-
+            hAxis: {
+              textStyle: {
+                fontSize: 11 
+             },
+            },
+            vAxis : {
+              format: '0',
+            },
 
           };
 
@@ -105,8 +115,8 @@ export class DashBoardGOGChartData extends AppComponentBase  {
         this.industryTimeChartData= res.body;
         this.allChartsDataMap.set('industryTimeChartData',res.status);
 
-        const data =[] ;
-        const columnNames = ['Company Name', 'Time Spend'];  
+        let data =[] ;
+        const columnNames = ['Company Name', 'Time(seconds)'];  
         data.unshift(columnNames);
 
         this.industryTimeChartData.forEach((item)=>{
@@ -129,6 +139,14 @@ export class DashBoardGOGChartData extends AppComponentBase  {
             backgroundColor: '#E4E4E4',
             pointSize: 7,
             dataOpacity: 0.5,
+            hAxis: {
+              textStyle: {
+                fontSize: 11 
+            },
+          },
+          vAxis : {
+            format: '0',
+          },
 
         
 
@@ -156,8 +174,8 @@ export class DashBoardGOGChartData extends AppComponentBase  {
         this.allChartsDataMap.set('companyTimeChartData',res.status);
 
 
-        const data =[] ;
-        const columnNames = ['Company Ticker', 'Time Spend'];  
+        let data =[] ;
+        const columnNames = ['Company Ticker', 'Time(seconds)'];  
         data.unshift(columnNames);
 
         this.companyTimeChartData.forEach((item)=>{
@@ -179,7 +197,15 @@ export class DashBoardGOGChartData extends AppComponentBase  {
             width:'100%',
             height:300,
             backgroundColor: '#E4E4E4',
-            colors: ['#A61D4C']
+            colors: ['#A61D4C'],
+            hAxis: {
+                textStyle: {
+                  fontSize: 11 
+              },
+            },
+            vAxis : {
+              format: '0',
+          },
 
             
           };
@@ -206,8 +232,8 @@ export class DashBoardGOGChartData extends AppComponentBase  {
         this.companyVisitChartData = res.body;
         this.allChartsDataMap.set('companyVisitChartData',res.status);
 
-        const data =[] ;
-        const columnNames = ['Company Tickers', 'Visit Count'];  
+        let data =[] ;
+        const columnNames = ['Company Tickers', 'Visitors'];  
 
         data.unshift(columnNames);
 
@@ -232,6 +258,14 @@ export class DashBoardGOGChartData extends AppComponentBase  {
             backgroundColor: '#E4E4E4',
             pointSize: 7,
             dataOpacity: 0.5,
+            hAxis: {
+                textStyle: {
+                  fontSize: 11 
+              },
+            },
+            vAxis : {
+              format: '0',
+          },
 
 
 
@@ -252,49 +286,141 @@ export class DashBoardGOGChartData extends AppComponentBase  {
   
  
     initMainChart(uri:string) {
-        this.apiService.get(AppConsts.companyVisitChart + uri)
+        this.apiService.get(AppConsts.uniqueVisitors + uri)
         .subscribe((res:any)=>{
+          this.mainChartVisitorData = res.body;
+          this.allChartsDataMap.set('mainChartVisitorData',res.status);
 
-            var datawebsiteViewsChart = {
-                labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
-                series: [
-                  [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
-        
-                ]
-              }
-              
-              const optionscompanyVisitChart: any = {
-                lineSmooth: Chartist.Interpolation.cardinal({
-                    tension: 0
-                }),
-                showPoint: false,
-                axisX: {
-                  showGrid: false
-                },
-                // low: 0,
-                // high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-                chartPadding: { top: 0, right: 0, bottom: 0, left: 0},
+          console.log(this.mainChartVisitorData);
+
+        let data =[] ;
+        const columnNames = ['Date', 'Visitors'];  
+
+        data.unshift(columnNames);
+        console.log(data);
+
+        const options = {  
+          legend: 'none',  
+          is3D: true,
+          animation:{
+            duration: 2000,
+            easing: 'linear',
+            startup:true
+          },
+          width:'100%',
+          height:300,
+          backgroundColor: 'white',
+          pointSize: 7,
+          dataOpacity: 0.5,
+          hAxis: {
+            textStyle: {
+              fontSize: 11 
+          }
+          },
+          vAxis : {
+            // title: 'Visitor Count ',
+            format: '0',
+        },
+     
+        };
+
+        if (this.mainChartVisitorData.length > 30 && this.mainChartVisitorData.length <= 90) {
+
+          const weeklyData = new Map();
+
+          this.mainChartVisitorData.forEach((item) => {
+            const date = new Date(item.key);
+            const dayOfWeek = date.getDay(); 
+            const startDate = new Date(date);
+            startDate.setDate(date.getDate() - dayOfWeek); 
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 6); 
+
+            const weekRange = `${startDate.getDate()} - ${endDate.getDate()} ${endDate.toLocaleString('en-US', { month: 'short' })} `;
+
+            if (!weeklyData.has(weekRange)) {
+              weeklyData.set(weekRange, 0);
             }
-          
-            //  this.mainChartVisitor = new Chartist.Line('#mainChartVisitor', datawebsiteViewsChart, optionscompanyVisitChart);
-          
-          //   this.startAnimationForLineChart(companyVisitChart);
 
+            weeklyData.set(weekRange, weeklyData.get(weekRange) + item.value);
+          });
+
+          let weeklySumData = Array.from(weeklyData, ([weekRange, value]) => ({ weekRange, value }));
+          
+          weeklySumData.forEach((item)=>{
+            data.push([
+              item.weekRange,
+              item.value,
+            ])
+          });
+             
+        } else if (this.mainChartVisitorData.length > 90) {
+
+           const monthlyData = new Map();
+
+            this.mainChartVisitorData.forEach((item) => {
+              const date = new Date(item.key);
+              const monthName = date.toLocaleString('en-US', { month: 'short' }); 
+              const year = date.getFullYear().toString().substr(-2); 
+
+              const monthYearString = monthName + ' ' + year;
+
+              if (!monthlyData.has(monthYearString)) {
+                monthlyData.set(monthYearString, 0);
+              }
+
+              monthlyData.set(monthYearString, monthlyData.get(monthYearString) + item.value);
+            });
+
+            let monthlySumData = Array.from(monthlyData, ([monthYearString, value]) => ({ monthYearString, value }));
+
+            monthlySumData.forEach((item)=>{
+              data.push([
+                item.monthYearString,
+                item.value,
+              ])
+            });
+
+       
+        } else {
+
+          const dailyData = new Map();
+
+          this.mainChartVisitorData.forEach((item) => {
+            const date = new Date(item.key);
+            const dayDateStr = date.toLocaleString('en-US', { month: 'short', day: 'numeric' });
+
+            if (!dailyData.has(dayDateStr)) {
+              dailyData.set(dayDateStr, 0);
+            }
+
+            dailyData.set(dayDateStr, dailyData.get(dayDateStr) + item.value);
+          });
+
+          let dailySumData = Array.from(dailyData, ([dayDateStr, value]) => ({ dayDateStr, value }));
+
+          console.log(dailySumData);
+
+
+        dailySumData.forEach((item)=>{
+            data.push([
+              item.dayDateStr,
+              item.value,
+            ]
+            )
+        });
+        }
+  
+            
+        this.mainChartVisitor.columnNames=columnNames;
+        this.mainChartVisitor.title="Visitors"  
+        this.mainChartVisitor.type="LineChart";
+        this.mainChartVisitor.data=data;
+        this.mainChartVisitor.options=options;
+        
         });
         
     }
 
-    getCurrentDate(isPrevious: boolean, days: number): string {
-        const currentDate = new Date();
-        if (isPrevious) {
-          currentDate.setDate(currentDate.getDate() - days);
-        }
-        const year = currentDate.getFullYear();
-        const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-        const day = currentDate.getDate().toString().padStart(2, '0');
-    
-        // 2023-08-31 in this format
-        return `${year}-${month}-${day}`;
-      }
      
 }

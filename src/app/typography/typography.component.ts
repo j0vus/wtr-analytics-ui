@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ColDef } from 'ag-grid-community';
+import { AppConsts } from 'app/core/constants/appConstants';
 import { ApiService } from 'app/core/services/api/api.service';
 import { SharedDataService } from 'app/core/services/shared/shared-data.service';
 
@@ -9,21 +12,31 @@ import { SharedDataService } from 'app/core/services/shared/shared-data.service'
 })
 export class TypographyComponent implements OnInit {
 
-  dateRange: string = null;
+  dateRange: string = null;  
 
-  constructor(private apiService: ApiService, private shareDate: SharedDataService) {
+  visitorData:any;
+  constructor(private apiService: ApiService, private shareDate: SharedDataService, private route: Router) {
     this.shareDate.sharedData$.subscribe((data) => {
       this.dateRange = data;
       if(this.dateRange != null && this.dateRange.split(":")[0] === 'Visitors'){   
         console.log(this.dateRange);
+        let uri = this.uriPath(this.dateRange);
+        this.apiService.getOnlyJson(AppConsts.visitorsData + uri).subscribe((res)=>{
+        this.visitorData=res;
+        });
       }
       
     });
-   }
-
-  ngOnInit() {
   }
-
+   
+  ngOnInit() {
+    let uri = this.uriPath(null);
+    this.apiService.getOnlyJson(AppConsts.visitorsData + uri).subscribe((res)=>{
+      this.visitorData=res;
+      });
+    this.shareDate.showSearchBox(false);  
+  }
+  
   uriPath(dateRange:string):string{
     let uri:string;
     if(dateRange != null){
@@ -40,7 +53,7 @@ export class TypographyComponent implements OnInit {
 
     return uri;
   }
-
+   
   getCurrentDate(isPrevious: boolean, days: number): string {
     const currentDate = new Date();
     if (isPrevious) {
@@ -52,6 +65,11 @@ export class TypographyComponent implements OnInit {
 
     // 2023-08-31 in this format
     return `${year}-${month}-${day}`;
- }
+  }
+
+  onVisitorClick(visitorID: string) {
+    this.route.navigate(['/visitor', visitorID]);
+  }
+  
 
 }

@@ -9,28 +9,12 @@
                     <div class="col-md-6 pl-4">
                         Visitors
                     </div>
-                    
-                    <div class="col-md-6 pl-5 text-center">
-                        <!-- <div></div> -->
-                        <div> <span class="mx-5">This Year</span> Sort by <span class="ml-4">Year</span></div>
-                         
-                        
-                    </div>
-                    <!-- <div class="col-md-2"></div> -->
                 </div>    
             </div>
-            <!-- <div class="ct-chart" id="mainChartVisitor"></div>
-             -->
-             <div  id="mainChartVisitor"></div>
+             <div *ngIf="isGChart"  id="mainChartVisitor"></div>
 
-            <!-- <div class="card-header card-header-success blue-clr">
-               
-            </div> -->
-            <!-- <div class="card-body">
-                <h4 class="card-title">Total Visitors</h4>
-                
-            </div> -->
-         
+             <div *ngIf="isChartish"  id="mainChartVisitor"></div>
+
         </div>
 
      </div>
@@ -38,16 +22,12 @@
     <div class="row">
        <h3>Sectors</h3>
       </div>
-      <!-- <div class="row"> -->
-          <!-- <div class="col-md-6"> -->
               <div class="card card-chart">
                     
                 <div *ngIf="isGChart" class="ct-chart" id="sectorVisitChart"></div>
 
                   <div *ngIf="isChartish" class="card-header card-header-success blue-clr">
                       <div class="ct-chart" id="sectorVisitChart"></div>
-                      <!-- <div  id="sectorVisitChart"></div> -->
-
 
                   </div>
                   <div class="card-body">
@@ -56,13 +36,11 @@
                   </div>
                
               </div>
-          <!-- </div> -->
-          <!-- <div class="col-md-6"> -->
               <div class="card card-chart">
                 <div *ngIf="isGChart" class="ct-chart" id="sectorTimeChart"></div>
                   <div *ngIf="isChartish" class="card-header card-header-warning darkblue-clr">
                       <div class="ct-chart" id="sectorTimeChart"></div>
-                      <!-- <div  id="sectorVisitChart"></div> -->
+            
                   </div>
                   <div class="card-body">
                       <h4 class="card-title">Average engagement time</h4>
@@ -70,11 +48,6 @@
                   </div>
     
               </div>
-          <!-- </div> -->
-       
-          <!-- </div> -->
-    
-
 
 
       <div class="row">
@@ -83,22 +56,6 @@
        <div class="row">
        
            <div class="col-md-6">
-           
-                <!-- <div class="card z-index-2 ">
-                  <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
-                    <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1"> -->
-                      <!-- <div class="chart">
-                        <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
-                      </div> -->
-                      <!-- <div  id="companyVisitedChart"></div> -->
-                    <!-- </div>
-                  </div>
-                  <div class="card-body">
-                    <h6 class="mb-0 ">Website Views </h6>
-               
-                  </div>
-                </div> -->
-
                 
 
                 <div  class="card card-chart">
@@ -151,7 +108,7 @@
                           <tbody>
                               <tr *ngFor="let item of mostVisitedocByCountry">
                                   <td>{{item.country}}</td>
-                                  <td>{{item.documentTimeSpend}} </td>
+                                  <td>{{item.countryVisitCount}} </td>
                                   <td>{{item.docId}}</td>
                                   <td>{{item.city}}</td>
                               </tr>
@@ -162,6 +119,5 @@
           </div>
       </div>
   </div>
-
   
 </div>

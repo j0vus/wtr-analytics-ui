@@ -18,6 +18,9 @@ import {
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { Moment } from 'moment';
 import { MatInput } from '@angular/material/input';
+import { AdminLayoutRoutes } from 'app/layouts/admin-layout/admin-layout.routing';
+import { AppConsts } from 'app/core/constants/appConstants';
+import { ApiService } from 'app/core/services/api/api.service';
 
 
 @Component({
@@ -34,6 +37,12 @@ export class NavbarComponent implements OnInit {
     private toggleButton: any;
     private sidebarVisible: boolean;
 
+    searchTerm: string = '';
+    data: any[] = []; 
+    filteredData: any[] = [];
+    showDropdown: boolean = false;
+    showSearhBox:boolean = false;
+  
     @ViewChild('dateRangeInput') dateRangeInput: any;
     @ViewChild('startDateInput') startDateInput: any;
     @ViewChild('endDateInput') endDateInput: any;
@@ -41,9 +50,47 @@ export class NavbarComponent implements OnInit {
     @ViewChild(MatDateRangePicker)
     picker: MatDateRangePicker<Moment>;
 
-    constructor(location: Location,  private element: ElementRef, private router: Router, private shareData: SharedDataService, private renderer: Renderer2, private chRef: ChangeDetectorRef, private fb:FormBuilder) {
+    constructor(location: Location,  private element: ElementRef, private router: Router, private shareData: SharedDataService, private renderer: Renderer2, private chRef: ChangeDetectorRef, private fb:FormBuilder, private apiService:ApiService) {
       this.location = location;
           this.sidebarVisible = false;
+          
+          console.log('djj' + this.showSearhBox);
+
+          this.shareData.sharedSearchItems$.subscribe((data) => {
+            this.data.length =0;
+            if(data != null){
+              if(data[0]==='industry') {
+                data.forEach((item, index)=>{
+                  if(index > 0) {
+                    this.data.push(item.industryName);
+                  }
+                })
+              } 
+              if(data[0]=== 'issuer'){
+                data.forEach((item, index)=>{
+                  if(index > 0){
+                    this.data.push(item.issuerName);
+                  }
+                })
+              }
+              console.log(data);
+            }
+          });   
+          
+          // this.shareData.searchBoxShow$.subscribe((data)=>{
+           
+          //   if(data != null ){
+          //     console.log(data);
+          //     // this.showSearhBox=data;
+          //     console.log(this.showSearhBox);
+          //     if(this.showSearhBox){
+          //       this.showDropdown=true;
+          //     } else {
+          //       this.showDropdown = false;
+          //     }
+          // }
+          // });
+            // console.log(this.getTitle());
     }
 
     
@@ -55,7 +102,10 @@ export class NavbarComponent implements OnInit {
   
 
     ngOnInit(){
+      // console.log(this.getTitle());
       this.listTitles = ROUTES.filter(listTitle => listTitle);
+      console.log(this.listTitles);
+      // this.listTitles = AdminLayoutRoutes.filter(listTitle=>listTitle);
       const navbar: HTMLElement = this.element.nativeElement;
       this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];
       this.router.events.subscribe((event) => {
@@ -67,16 +117,28 @@ export class NavbarComponent implements OnInit {
          }
      });
 
-
      //reset the date range  and search bar
      this.router.events.pipe(
         filter(event => event instanceof NavigationEnd)
       ).subscribe((event: NavigationEnd) => {
         const newUrl = event.url;
         console.log('URL changed to:', newUrl);
+        this.data.length=0;
+        this.filteredData.length=0;
         if(this.searchItems){
             this.searchItems.nativeElement.value = '';
-            }
+            this.showDropdown = false;
+        }
+
+        console.log();
+        if(this.getTitle()=== 'Sectors' || this.getTitle()=== 'Companies'){
+          this.showSearhBox=true;
+        } else {
+          this.showSearhBox=false;
+        }
+
+        this.showDropdown = false;    
+
         this.resetPicker();        
 
       });
@@ -163,14 +225,19 @@ export class NavbarComponent implements OnInit {
     getTitle(){
       var titlee = this.location.prepareExternalUrl(this.location.path());
       if(titlee.charAt(0) === '#'){
-          titlee = titlee.slice( 1 );
-      }
+          // titlee = titlee.slice( 1 );
+          let parts = titlee.split('/');
+           titlee = '/' + parts[1];
+           console.log(titlee);
 
+      }
+    
       for(var item = 0; item < this.listTitles.length; item++){
           if(this.listTitles[item].path === titlee){
               return this.listTitles[item].title;
           }
       }
+      
       return 'Dashboard';
     }
 
@@ -178,7 +245,8 @@ export class NavbarComponent implements OnInit {
     selectedDateRange(){
         const startDate = this.convertDateFormat(this.startDateInput.nativeElement.value);
         const endDate = this.convertDateFormat(this.endDateInput.nativeElement.value);
-        if(this.getTitle() !='Dashboard') {
+        const pages = ['Sectos','Companies'];
+        if(pages.includes(this.getTitle())) {
             const search = this.searchItems.nativeElement.value;
             this.shareData.updateSharedData(this.getTitle() +":"+ startDate +":" + endDate + ":" + search);
         } else {
@@ -210,6 +278,20 @@ export class NavbarComponent implements OnInit {
     return '';
   }
 
+  onSearch() {
+    if (this.searchTerm.length > 0) {
+      this.filteredData = this.data.filter(item => item.toLowerCase().includes(this.searchTerm.toLowerCase()));
+      this.showDropdown = true;
+      console.log(this.filteredData);
+    } else {
+      this.showDropdown = false;
+    }
+  }
+
+  selectItem(item: string) {
+    this.searchTerm = item;
+    this.showDropdown = false;
+  }
 
 }
 

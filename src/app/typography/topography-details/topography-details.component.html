@@ -1,0 +1,151 @@
+
+<div class="main-content">
+    <div class="container-fluid">
+        
+        <div class="container-div">
+            <div class="main-div">
+        
+              <div class="body-div">
+                 
+                <div class="bodyHead">
+
+                    <table class="collapsible-table">
+                        <tr>
+                          <td><div class="bodyHead-div">
+                            <div>Sessions (LTV) <i class="fa fa-question-circle " aria-hidden="true" (mouseenter)="showDetails[5] = true" (mouseleave)="showDetails[5] = false"></i></div>
+                            <div> <span> 455</span></div>
+                            <div class="body-head-div-value">Sessions (Current): 22</div>
+                            <div *ngIf="showDetails[5]" class="dynamic-session" >Total sessions over the user's lifetime.</div>
+                          </div></td>
+                          <td><div  class="bodyHead-div">
+                            <div>Session Duration (LTV) <i class="fa fa-question-circle " aria-hidden="true" (mouseenter)="showDetails[6] = true" (mouseleave)="showDetails[6] = false"></i></div>
+                            <div> <span> 102:21:35</span></div>
+                            <div class="body-head-div-value">Session Duration (Current):03:09:21</div>
+                            <div *ngIf="showDetails[6]" class="dynamic-session-dur" >Total Session Duration over the user's lifetime.</div>
+                          </div></td>
+                          <td><div  class="bodyHead-div">
+                            <div>Page View (LTV) <i class="fa fa-question-circle " aria-hidden="true" (mouseenter)="showDetails[7] = true" (mouseleave)="showDetails[7] = false"></i></div>
+                            <div> <span>1000</span></div>
+                            <div class="body-head-div-value">Page View (Current):50</div>
+                            <div *ngIf="showDetails[7]"  class="dynamic-pageView">Total Page View over the user's lifetime.</div>
+                          </div></td>
+                        </tr>
+                      </table>
+                  
+                </div>
+                <div class="details">
+                  <div *ngFor="let entry of visitorSession | keyvalue; let i = index">
+                    <div>
+                      <div class="row">
+                        
+                        <div
+                          class="custom-details"
+                          [class.open]="isOpenArray[i]"
+                          (click)="toggleDetails(i)" >
+                        
+                          <div class="summary">
+                              
+                            <span class="arrow" ><i class="fa fa-caret-right fa-lg " aria-hidden="true"></i></span>
+                            <div class="col-10" >{{ entry.key | dateFormatPipe }}</div>
+                            <div class="col-2"  *ngIf="entry.value.length > 1">{{ entry.value.length }} sessions</div>
+                            <div class="col-2" *ngIf="entry.value.length == 1">{{ entry.value.length }} session</div>
+                          </div>
+                          
+                          <div class="content" [class.hidden]="!isOpenArray[i]">
+                            <div>
+                              <div class="row" *ngFor="let session of entry.value; let j = index">
+                                <div
+                                  class="custom-details-inner"
+                                  [class.open]="isOpenInnerArray[i * 1000 + j ]"
+                                  (click)="toggleInnerDetails(i * 1000 + j , $event)" >
+                                
+                                    <div class="summary-inner">
+                                      <span class="arrow-inner" ><i class="fa fa-caret-right " aria-hidden="true"></i></span>
+                                      <div class="summary-inner-div">
+                                        <div *ngIf="session.visitorActivities != null && session.visitorActivities.length > 0 "> <span style="padding-left: 15px;" > {{session.visitorActivities[0].time}}</span></div>
+                                        <div><i class="fa fa-clock-o fa-lg" aria-hidden="true"></i> {{session.sessionDuration}}</div>
+                                        <div class="desktop-data" ><i class="fa fa-desktop fa-lg" aria-hidden="true"   (mouseenter)="onMouseEnter($event,i+j)" (mouseleave)="showDesktop[i+j] = false"></i></div>
+                                        <div >{{session?.visitorActivities[0]?.source}}</div>
+                                        <div  ><i class="fa fa-eye eye-icon" (mouseenter)="showEye[i+j] = true" (mouseleave)="showEye[i+j] = false"></i>  {{session?.visitorActivities?.length}}</div>
+                                        <div *ngIf="showEye[i+j] && session?.visitorActivities?.length >1" class="dynamic-data-session" >
+                                            Session contains {{session?.visitorActivities?.length}} pageviews
+                                        </div>
+                                        <div *ngIf="showEye[i+j] && session?.visitorActivities?.length ==1" class="dynamic-data-session" >
+                                            Session contains {{session?.visitorActivities?.length}} pageview
+                                        </div>
+                                        <div class="desktop-details" *ngIf="showDesktop[i+j]" >
+                                            <div>Device category: <span> {{session.deviceCategory}} </span></div>
+                                            <div>Platform: <span> {{session.platform}} </span></div>
+                                            <div>Data source: <span>{{session.dataSource}}</span></div> 
+                                        </div>
+                                      </div>  
+                                    </div>
+                                  
+                                  <div
+                                    class="content-inner"
+                                    [class.hidden]="!isOpenInnerArray[i * 1000 + j ]"
+                                  >
+                                    <div
+                                      class="sDetails"
+                                      *ngFor="let activity of session.visitorActivities; let k= index"
+                                    >  
+                                    
+                                      <div class="row">
+                                        <div
+                                          class="custom-details-inner2 "
+                                          [class.open]="isOpen[i * 1000 + j * 1000 +k ]"
+                                          (click)="
+                                            toggleDetailsPagePath(
+                                              i * 1000 + j * 1000 + k ,
+                                              $event
+                                            )
+                                          "
+                                        >
+                                          <div class="summary-inner2" >
+                                             
+                                            <div class="summary-inner2-div" >
+                                             <div >{{ activity.time }}</div>
+                                             <div ><i class="fa fa-eye eye-icon" (mouseenter)="showContent[i+j+k] = true" (mouseleave)="showContent[i+j+k] = false"></i></div> 
+                                             <div *ngIf="showContent[i+j+k]" class="dynamic-data" >
+                                                {{ activity.activityType | lowercase }}
+                                              </div> 
+                                             <div  >Viewed <span class="pageTitle">{{activity.pageTitle}}</span> </div>
+                                             <div class="pagePath">{{activity.pagePath}}</div>
+                                             
+                            
+                                          </div>
+                                        </div>
+                                          <div
+                                            class="content-inner2 "
+                                            [class.hidden]="!isOpen[i * 1000 + j * 1000 +k ]"
+                                           >
+                                           <div class="content-inner2-div" >
+                                              <div class="pageTitleD" >
+                                                <div> <span> Page Title </span></div>
+                                                <div>{{activity.pageTitle}}</div>
+                                              </div> 
+                                              <div class="pagePathD" >
+                                                <div> <span> Page Path </span></div>
+                                                <div>{{activity.pagePath}}</div>
+                                              </div>
+                                           </div>
+                                          </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                            </div>
+                          </div>
+                        </div>
+                     </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>      
+     </div>
+</div>
+  
