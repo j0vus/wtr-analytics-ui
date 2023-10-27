@@ -50,29 +50,24 @@ li {
   }
   
 
-/* Hide scrollbar up and down buttons */
 .scrollable-list::-webkit-scrollbar-button {
     display: none;
 }
 
-/* Set a custom width for the scrollbar */
 .scrollable-list::-webkit-scrollbar {
-    width: 7px; /* Adjust this value as needed */
+    width: 7px;
 }
 
-/* Define the track (the area behind the scrollbar) */
 .scrollable-list::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.5); /* Customize as needed */
+    background: rgba(255, 255, 255, 0.5); 
 }
 
-/* Define the thumb (the draggable part of the scrollbar) */
 .scrollable-list::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.5); /* Customize as needed */
+    background: rgba(0, 0, 0, 0.5); 
 }
 
-/* Define the corner (the area between the vertical and horizontal scrollbars) */
 .scrollable-list::-webkit-scrollbar-corner {
-    /* background: transparent; */
-    border-radius: 10px; /* Rounded corners */
+    background: transparent;
+    border-radius: 10px; 
 
 }
