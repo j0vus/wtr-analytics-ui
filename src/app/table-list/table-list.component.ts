@@ -39,7 +39,7 @@ export class NullToZeroPipe implements PipeTransform {
 })
 export class TruncatePipe implements PipeTransform {
   transform(value: string, maxLength: number): string {
-    if (value.length > maxLength) {
+    if (value?.length > maxLength) {
       return value.slice(0, maxLength) + '...'; 
     }
     return value; 
@@ -69,7 +69,7 @@ export class TableListComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.shareDate.showSearchBox(true);
+    // this.shareDate.showSearchBox(true);
     this.apiService.getOnlyJson(AppConsts.issuersAll).subscribe((res)=>{
       this.allActiveCompanies = res;
       let searchList = [...res];

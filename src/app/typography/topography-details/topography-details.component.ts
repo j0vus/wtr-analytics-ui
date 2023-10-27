@@ -5,6 +5,15 @@ import { ApiService } from 'app/core/services/api/api.service';
 import { SharedDataService } from 'app/core/services/shared/shared-data.service';
 import { utilityMethods } from 'app/core/shared/utility';
 
+
+interface VisitorDataCurrent {
+  currentSessionCount: number;
+  currentPageViewCount: number;
+  currentSessionDuration: string;
+
+}
+
+
 @Component({
   selector: 'app-topography-details',
   templateUrl: './topography-details.component.html',
@@ -25,6 +34,12 @@ export class TopographyDetailsComponent implements OnInit {
 
   util:utilityMethods;
   dateRange:string= null;
+
+   visitorCurrentData : VisitorDataCurrent = {
+    currentSessionCount: 0,
+    currentPageViewCount: 0,
+    currentSessionDuration: '0',
+  }
   
   constructor(private apiService:ApiService, private route: ActivatedRoute, private shareDate:SharedDataService) {
     this.util= new utilityMethods();
@@ -48,7 +63,10 @@ export class TopographyDetailsComponent implements OnInit {
     this.route.params.subscribe(params => {
       let visitorId = params['id'];
       this.apiService.getOnlyJson(AppConsts.sessionDetails + uri +`&visitorId=`+visitorId ).subscribe((res: any)=>{
-        this.visitorSession=res;
+        this.visitorSession=res?.visitorSession;
+        this.visitorCurrentData.currentPageViewCount=res.currentPageViewCount;
+        this.visitorCurrentData.currentSessionCount=res.currentSessionCount;
+        this.visitorCurrentData.currentSessionDuration=res.currentSessionDuration;
         
       });
     });

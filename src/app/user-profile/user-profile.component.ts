@@ -32,7 +32,7 @@ export class UserProfileComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.shareDate.showSearchBox(true);
+    // this.shareDate.showSearchBox(true);
     this.apiService.getOnlyJson(AppConsts.sectorsAll).subscribe((res)=>{
       this.allSectors = res;
       let searchList = [...res];

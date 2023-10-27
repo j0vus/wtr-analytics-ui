@@ -116,16 +116,47 @@ export class DashBoardGOGChartData extends AppComponentBase  {
         this.allChartsDataMap.set('industryTimeChartData',res.status);
 
         let data =[] ;
-        const columnNames = ['Company Name', 'Time(seconds)'];  
-        data.unshift(columnNames);
+        let columnNames;
+        
+        if( res.body.length==10?res.body[4].value:res.body[res.body.length-1].value > 3600){
 
-        this.industryTimeChartData.forEach((item)=>{
-            data.push([
-              item.key,
-              item.value,
-            ]
-            )
-        });
+          columnNames = ['Company Name', 'Time(Hrs)'];  
+          data.unshift(columnNames);
+
+          this.industryTimeChartData.forEach((item)=>{
+            let num:number = item.value /3600;
+              data.push([
+                item.key,
+                parseFloat(num.toFixed(2)),
+              ]
+              )
+          });
+        } else if(res.body[0].value <= 60){
+          
+          columnNames = ['Company Name', 'Time(Seconds)'];  
+          data.unshift(columnNames);
+
+          this.industryTimeChartData.forEach((item)=>{
+              data.push([
+                item.key,
+                item.value,
+              ]
+              )
+          });
+        } else {
+          columnNames = ['Company Name', 'Time(min)'];  
+          data.unshift(columnNames);
+
+          this.industryTimeChartData.forEach((item)=>{
+            let num:number = item.value /60;
+              data.push([
+                item.key,
+                parseFloat(num.toFixed(2)),
+              ]
+              )
+          });
+        }
+        
         const  options = {  
             legend: 'none',  
             is3D: true,
@@ -173,9 +204,24 @@ export class DashBoardGOGChartData extends AppComponentBase  {
         this.companyTimeChartData = res.body;
         this.allChartsDataMap.set('companyTimeChartData',res.status);
 
-
         let data =[] ;
-        const columnNames = ['Company Ticker', 'Time(seconds)'];  
+        let columnNames;
+        if(res.body.length==10?res.body[4].value:res.body[res.body.length-1].value > 3600) {
+          columnNames = ['Company Ticker', 'Time(Hrs)'];  
+          data.unshift(columnNames);
+
+          this.companyTimeChartData.forEach((item)=>{
+            let num:number = item.value/3600;
+            
+              data.push([
+                item.key,
+                parseFloat(num.toFixed(2)),
+              ]
+              )
+          });
+       } else if(res.body[0].value <= 60) {
+
+        columnNames = ['Company Ticker', 'Time(Seconds)'];  
         data.unshift(columnNames);
 
         this.companyTimeChartData.forEach((item)=>{
@@ -185,7 +231,21 @@ export class DashBoardGOGChartData extends AppComponentBase  {
             ]
             )
         });
-       
+
+       } else {
+          columnNames = ['Company Ticker', 'Time(min)'];  
+          data.unshift(columnNames);
+
+          this.companyTimeChartData.forEach((item)=>{
+            let num:number = item.value/60;
+              data.push([
+                item.key,
+                parseFloat(num.toFixed(2)),
+              ]
+              )
+          });
+       }
+
         const  options = {  
             legend: 'none',  
             is3D: true,
@@ -215,10 +275,6 @@ export class DashBoardGOGChartData extends AppComponentBase  {
         this.companyTimeChart.type="BarChart";
         this.companyTimeChart.data=data;
         this.companyTimeChart.options=options;
-        // this.companyTimeChart.height=500;
-        // this.companyTimeChart.width=300;
-  
-
    
       });
     }
@@ -267,23 +323,16 @@ export class DashBoardGOGChartData extends AppComponentBase  {
               format: '0',
           },
 
-
-
-
           };
 
         this.companyVisitChart.columnNames=columnNames;
         this.companyVisitChart.title="Visit Count"  
         this.companyVisitChart.type="LineChart";
         this.companyVisitChart.data=data;
-        this.companyVisitChart.options=options;
-        // this.companyVisitChart.height=500;
-        // this.companyVisitChart.width=300;
-  
+        this.companyVisitChart.options=options;  
       });
   
     }
-  
  
     initMainChart(uri:string) {
         this.apiService.get(AppConsts.uniqueVisitors + uri)
@@ -291,13 +340,10 @@ export class DashBoardGOGChartData extends AppComponentBase  {
           this.mainChartVisitorData = res.body;
           this.allChartsDataMap.set('mainChartVisitorData',res.status);
 
-          console.log(this.mainChartVisitorData);
-
         let data =[] ;
         const columnNames = ['Date', 'Visitors'];  
 
         data.unshift(columnNames);
-        console.log(data);
 
         const options = {  
           legend: 'none',  
@@ -398,9 +444,6 @@ export class DashBoardGOGChartData extends AppComponentBase  {
           });
 
           let dailySumData = Array.from(dailyData, ([dayDateStr, value]) => ({ dayDateStr, value }));
-
-          console.log(dailySumData);
-
 
         dailySumData.forEach((item)=>{
             data.push([

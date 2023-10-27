@@ -90,7 +90,6 @@ export class DashboardComponent implements OnInit {
     this.startAnimationForLineChart(this.chartsData.sectorVisitChart);
     this.startAnimationForLineChart(this.chartsData.companyVisitChart);
     this.startAnimationForBarChart(this.chartsData.companyTimeChart);
-    console.log(' charts created using chartist ');
 
   }
 
@@ -128,7 +127,6 @@ export class DashboardComponent implements OnInit {
         this.ngZone.run(() => {
           const currentSize = this.gChartsData.allChartsDataMap.size;
   
-          console.log(currentSize);
           if (currentSize === 5) {
             
             this.drawChart();
@@ -149,8 +147,6 @@ export class DashboardComponent implements OnInit {
 
   drawChart() {
     
-    console.log("google chart created");
-
     var chart1 = new google.visualization.LineChart(document.getElementById('sectorVisitChart'));
     chart1.draw(google.visualization.arrayToDataTable(this.sectorVisitChart.data),this.sectorVisitChart.options);
 

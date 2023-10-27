@@ -23,6 +23,7 @@
 /* You can customize these styles further as needed */
 
 
+
 .search-items{
     box-sizing: border-box;
     position: absolute;
@@ -48,3 +49,30 @@ li {
     overflow-y: auto;
   }
   
+
+/* Hide scrollbar up and down buttons */
+.scrollable-list::-webkit-scrollbar-button {
+    display: none;
+}
+
+/* Set a custom width for the scrollbar */
+.scrollable-list::-webkit-scrollbar {
+    width: 7px; /* Adjust this value as needed */
+}
+
+/* Define the track (the area behind the scrollbar) */
+.scrollable-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.5); /* Customize as needed */
+}
+
+/* Define the thumb (the draggable part of the scrollbar) */
+.scrollable-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.5); /* Customize as needed */
+}
+
+/* Define the corner (the area between the vertical and horizontal scrollbars) */
+.scrollable-list::-webkit-scrollbar-corner {
+    /* background: transparent; */
+    border-radius: 10px; /* Rounded corners */
+
+}

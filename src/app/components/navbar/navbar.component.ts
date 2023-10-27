@@ -53,9 +53,6 @@ export class NavbarComponent implements OnInit {
     constructor(location: Location,  private element: ElementRef, private router: Router, private shareData: SharedDataService, private renderer: Renderer2, private chRef: ChangeDetectorRef, private fb:FormBuilder, private apiService:ApiService) {
       this.location = location;
           this.sidebarVisible = false;
-          
-          console.log('djj' + this.showSearhBox);
-
           this.shareData.sharedSearchItems$.subscribe((data) => {
             this.data.length =0;
             if(data != null){
@@ -73,39 +70,27 @@ export class NavbarComponent implements OnInit {
                   }
                 })
               }
-              console.log(data);
             }
           });   
           
           // this.shareData.searchBoxShow$.subscribe((data)=>{
            
           //   if(data != null ){
-          //     console.log(data);
-          //     // this.showSearhBox=data;
-          //     console.log(this.showSearhBox);
-          //     if(this.showSearhBox){
-          //       this.showDropdown=true;
-          //     } else {
-          //       this.showDropdown = false;
-          //     }
+          //     this.showSearhBox=data;
           // }
           // });
-            // console.log(this.getTitle());
     }
 
     
     resetPicker() {
         this.picker.select(undefined);
-        this.startDateInput.select(undefined);
-        this.endDateInput.select(undefined);
+        // this.startDateInput.select(undefined);
+        // this.endDateInput.select(undefined);
       }   
   
 
     ngOnInit(){
-      // console.log(this.getTitle());
       this.listTitles = ROUTES.filter(listTitle => listTitle);
-      console.log(this.listTitles);
-      // this.listTitles = AdminLayoutRoutes.filter(listTitle=>listTitle);
       const navbar: HTMLElement = this.element.nativeElement;
       this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];
       this.router.events.subscribe((event) => {
@@ -122,15 +107,13 @@ export class NavbarComponent implements OnInit {
         filter(event => event instanceof NavigationEnd)
       ).subscribe((event: NavigationEnd) => {
         const newUrl = event.url;
-        console.log('URL changed to:', newUrl);
         this.data.length=0;
         this.filteredData.length=0;
         if(this.searchItems){
             this.searchItems.nativeElement.value = '';
+            this.searchTerm='';
             this.showDropdown = false;
         }
-
-        console.log();
         if(this.getTitle()=== 'Sectors' || this.getTitle()=== 'Companies'){
           this.showSearhBox=true;
         } else {
@@ -142,8 +125,12 @@ export class NavbarComponent implements OnInit {
         this.resetPicker();        
 
       });
-    
-     
+
+      if(this.getTitle()=== 'Sectors' || this.getTitle()=== 'Companies'){
+        this.showSearhBox=true;
+        this.searchTerm='';
+      }
+
     }
       
 
@@ -160,7 +147,7 @@ export class NavbarComponent implements OnInit {
     };
     sidebarClose() {
         const body = document.getElementsByTagName('body')[0];
-        this.toggleButton.classList.remove('toggled');
+        // this.toggleButton.classList?.remove('toggled');
         this.sidebarVisible = false;
         body.classList.remove('nav-open');
     };
@@ -227,9 +214,7 @@ export class NavbarComponent implements OnInit {
       if(titlee.charAt(0) === '#'){
           // titlee = titlee.slice( 1 );
           let parts = titlee.split('/');
-           titlee = '/' + parts[1];
-           console.log(titlee);
-
+          titlee = '/' + parts[1];
       }
     
       for(var item = 0; item < this.listTitles.length; item++){
@@ -282,7 +267,6 @@ export class NavbarComponent implements OnInit {
     if (this.searchTerm.length > 0) {
       this.filteredData = this.data.filter(item => item.toLowerCase().includes(this.searchTerm.toLowerCase()));
       this.showDropdown = true;
-      console.log(this.filteredData);
     } else {
       this.showDropdown = false;
     }

@@ -14,19 +14,19 @@
                           <td><div class="bodyHead-div">
                             <div>Sessions (LTV) <i class="fa fa-question-circle " aria-hidden="true" (mouseenter)="showDetails[5] = true" (mouseleave)="showDetails[5] = false"></i></div>
                             <div> <span> 455</span></div>
-                            <div class="body-head-div-value">Sessions (Current): 22</div>
+                          <div class="body-head-div-value">Sessions (Current): {{visitorCurrentData.currentSessionCount}}</div>
                             <div *ngIf="showDetails[5]" class="dynamic-session" >Total sessions over the user's lifetime.</div>
                           </div></td>
                           <td><div  class="bodyHead-div">
                             <div>Session Duration (LTV) <i class="fa fa-question-circle " aria-hidden="true" (mouseenter)="showDetails[6] = true" (mouseleave)="showDetails[6] = false"></i></div>
                             <div> <span> 102:21:35</span></div>
-                            <div class="body-head-div-value">Session Duration (Current):03:09:21</div>
+                        <div class="body-head-div-value">Session Duration (Current):{{visitorCurrentData.currentSessionDuration}}</div>
                             <div *ngIf="showDetails[6]" class="dynamic-session-dur" >Total Session Duration over the user's lifetime.</div>
                           </div></td>
                           <td><div  class="bodyHead-div">
                             <div>Page View (LTV) <i class="fa fa-question-circle " aria-hidden="true" (mouseenter)="showDetails[7] = true" (mouseleave)="showDetails[7] = false"></i></div>
                             <div> <span>1000</span></div>
-                            <div class="body-head-div-value">Page View (Current):50</div>
+                            <div class="body-head-div-value">Page View (Current):{{visitorCurrentData.currentPageViewCount}}</div>
                             <div *ngIf="showDetails[7]"  class="dynamic-pageView">Total Page View over the user's lifetime.</div>
                           </div></td>
                         </tr>
