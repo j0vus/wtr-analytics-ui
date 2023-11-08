@@ -74,8 +74,8 @@ export class TableListComponent implements OnInit {
       this.allActiveCompanies = res;
       let searchList = [...res];
       this.issuer=res[0];
-      let uri = this.util.uriPath(null, res[0].jissuerId, 'sectorId');
-      this.apiService.getOnlyJson(AppConsts.companyDetails + uri).subscribe((data)=>{
+      let uri = this.util.uriPath(null, res[0].jissuerId, 'issuerId');
+      this.apiService.getOnlyJson(AppConsts.issuerDetails + uri).subscribe((data)=>{
       this.issuerDetails=data;
       });
       searchList.unshift("issuer");
@@ -92,8 +92,8 @@ export class TableListComponent implements OnInit {
       if(activeComapany.issuerName.toLowerCase() == searchItem.toLowerCase()){
         issuerId = activeComapany.jissuerId;
         this.issuer = activeComapany;
-        let uri = this.util.uriPath(dateRange,issuerId, 'sectorId');
-        this.apiService.getOnlyJson(AppConsts.companyDetails +uri).subscribe((data)=>{
+        let uri = this.util.uriPath(dateRange,issuerId, 'issuerId');
+        this.apiService.getOnlyJson(AppConsts.issuerDetails +uri).subscribe((data)=>{
         this.issuerDetails=data;
         });
     

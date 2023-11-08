@@ -46,6 +46,7 @@ export class DashboardComponent implements OnInit {
         });
 
         if(this.isGChart){
+          console.log('g charts constructor');
           this.initGCharts(this.dateRange);
         } 
         if(this.isChartish){
@@ -148,19 +149,30 @@ export class DashboardComponent implements OnInit {
   drawChart() {
     
     var chart1 = new google.visualization.LineChart(document.getElementById('sectorVisitChart'));
-    chart1.draw(google.visualization.arrayToDataTable(this.sectorVisitChart.data),this.sectorVisitChart.options);
+    if(this.sectorVisitChart.data.lenght !== 0){
+      chart1.draw(google.visualization.arrayToDataTable(this.sectorVisitChart.data),this.sectorVisitChart.options);
+    }
 
     var chart2 = new google.visualization.LineChart(document.getElementById('sectorTimeChart'));
-    chart2.draw(google.visualization.arrayToDataTable(this.sectorTimeChart.data),this.sectorTimeChart.options);
+    if(this.sectorTimeChart.data !== 0) {
+      chart2.draw(google.visualization.arrayToDataTable(this.sectorTimeChart.data),this.sectorTimeChart.options);
+    }
 
     var chart3 = new google.visualization.ColumnChart(document.getElementById('companyTimeChart'));
-    chart3.draw(google.visualization.arrayToDataTable(this.companyTimeChart.data),this.companyTimeChart.options);
-
+    if(this.companyTimeChart.data !== 0){
+      chart3.draw(google.visualization.arrayToDataTable(this.companyTimeChart.data),this.companyTimeChart.options);
+    }
+    
     var chart4 = new google.visualization.LineChart(document.getElementById('companyVisitedChart'));
-    chart4.draw(google.visualization.arrayToDataTable(this.companyVisitChart.data),this.companyVisitChart.options);
-
+    if(this.companyVisitChart.data !== 0) {
+      chart4.draw(google.visualization.arrayToDataTable(this.companyVisitChart.data),this.companyVisitChart.options);
+    }
+    
     var chart5 = new google.visualization.LineChart(document.getElementById('mainChartVisitor'));
-    chart5.draw(google.visualization.arrayToDataTable(this.mainChartVisitor.data),this.mainChartVisitor.options);
+    if(this.mainChartVisitor.data !== 0) {
+      chart5.draw(google.visualization.arrayToDataTable(this.mainChartVisitor.data),this.mainChartVisitor.options);
+    }
+    
     this.gChartsData.allChartsDataMap.clear(); 
 
  }

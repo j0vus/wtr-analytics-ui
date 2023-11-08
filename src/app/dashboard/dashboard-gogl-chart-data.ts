@@ -117,44 +117,48 @@ export class DashBoardGOGChartData extends AppComponentBase  {
 
         let data =[] ;
         let columnNames;
-        
-        if( res.body.length==10?res.body[4].value:res.body[res.body.length-1].value > 3600){
 
-          columnNames = ['Company Name', 'Time(Hrs)'];  
-          data.unshift(columnNames);
+        if (res.body && res.body.length > 0) {
+          if( res.body.length==10?res.body[4].value:res.body[res.body.length-1].value > 3600){
 
-          this.industryTimeChartData.forEach((item)=>{
-            let num:number = item.value /3600;
-              data.push([
-                item.key,
-                parseFloat(num.toFixed(2)),
-              ]
-              )
-          });
-        } else if(res.body[0].value <= 60){
-          
-          columnNames = ['Company Name', 'Time(Seconds)'];  
-          data.unshift(columnNames);
+            columnNames = ['Company Name', 'Time(Hrs)'];  
+            data.unshift(columnNames);
 
-          this.industryTimeChartData.forEach((item)=>{
-              data.push([
-                item.key,
-                item.value,
-              ]
-              )
-          });
+            this.industryTimeChartData.forEach((item)=>{
+              let num:number = item.value /3600;
+                data.push([
+                  item.key,
+                  parseFloat(num.toFixed(2)),
+                ]
+                )
+            });
+          } else if(res.body[0].value <= 60){
+            
+            columnNames = ['Company Name', 'Time(Seconds)'];  
+            data.unshift(columnNames);
+
+            this.industryTimeChartData.forEach((item)=>{
+                data.push([
+                  item.key,
+                  item.value,
+                ]
+                )
+            });
+          } else {
+            columnNames = ['Company Name', 'Time(min)'];  
+            data.unshift(columnNames);
+
+            this.industryTimeChartData.forEach((item)=>{
+              let num:number = item.value /60;
+                data.push([
+                  item.key,
+                  parseFloat(num.toFixed(2)),
+                ]
+                )
+            });
+          }
         } else {
-          columnNames = ['Company Name', 'Time(min)'];  
-          data.unshift(columnNames);
-
-          this.industryTimeChartData.forEach((item)=>{
-            let num:number = item.value /60;
-              data.push([
-                item.key,
-                parseFloat(num.toFixed(2)),
-              ]
-              )
-          });
+          // no data for the chart 
         }
         
         const  options = {  
@@ -206,45 +210,50 @@ export class DashBoardGOGChartData extends AppComponentBase  {
 
         let data =[] ;
         let columnNames;
-        if(res.body.length==10?res.body[4].value:res.body[res.body.length-1].value > 3600) {
-          columnNames = ['Company Ticker', 'Time(Hrs)'];  
-          data.unshift(columnNames);
+        if (res.body && res.body.length > 0) {
 
-          this.companyTimeChartData.forEach((item)=>{
-            let num:number = item.value/3600;
-            
-              data.push([
-                item.key,
-                parseFloat(num.toFixed(2)),
-              ]
-              )
-          });
-       } else if(res.body[0].value <= 60) {
+            if(res.body.length==10?res.body[4].value:res.body[res.body.length-1].value > 3600) {
+              columnNames = ['Company Ticker', 'Time(Hrs)'];  
+              data.unshift(columnNames);
 
-        columnNames = ['Company Ticker', 'Time(Seconds)'];  
-        data.unshift(columnNames);
+              this.companyTimeChartData.forEach((item)=>{
+                let num:number = item.value/3600;
+                
+                  data.push([
+                    item.key,
+                    parseFloat(num.toFixed(2)),
+                  ]
+                  )
+              });
+          } else if(res.body[0].value <= 60) {
 
-        this.companyTimeChartData.forEach((item)=>{
-            data.push([
-              item.key,
-              item.value,
-            ]
-            )
-        });
+            columnNames = ['Company Ticker', 'Time(Seconds)'];  
+            data.unshift(columnNames);
 
-       } else {
-          columnNames = ['Company Ticker', 'Time(min)'];  
-          data.unshift(columnNames);
+            this.companyTimeChartData.forEach((item)=>{
+                data.push([
+                  item.key,
+                  item.value,
+                ]
+                )
+            });
 
-          this.companyTimeChartData.forEach((item)=>{
-            let num:number = item.value/60;
-              data.push([
-                item.key,
-                parseFloat(num.toFixed(2)),
-              ]
-              )
-          });
-       }
+          } else {
+              columnNames = ['Company Ticker', 'Time(min)'];  
+              data.unshift(columnNames);
+
+              this.companyTimeChartData.forEach((item)=>{
+                let num:number = item.value/60;
+                  data.push([
+                    item.key,
+                    parseFloat(num.toFixed(2)),
+                  ]
+                  )
+              });
+          }
+        } else {
+          // no data for chart
+        } 
 
         const  options = {  
             legend: 'none',  

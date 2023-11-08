@@ -9,8 +9,8 @@ export class AppConsts {
     static readonly sessionDetails = 'analytics/visitor';
     static readonly issuersAll = 'issuer/all';
     static readonly sectorsAll = 'industry/all';
-    static readonly companyDetails ='analytics/getSectorDetails';
-    static readonly sectorDetails ='analytics/getCompanyDetails';
+    static readonly issuerDetails ='analytics/getIssuerDetails';
+    static readonly sectorDetails ='analytics/getSectorDetails';
     static readonly mostViewedDocByCountry ='analytics/getmostvieweddocumentbycountryandcity';
     static readonly visitorsData ='analytics/getVisitors';
     static readonly uniqueVisitors='analytics/getuniquevisitorsbydate';

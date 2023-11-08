@@ -73,12 +73,6 @@ export class NavbarComponent implements OnInit {
             }
           });   
           
-          // this.shareData.searchBoxShow$.subscribe((data)=>{
-           
-          //   if(data != null ){
-          //     this.showSearhBox=data;
-          // }
-          // });
     }
 
     
@@ -230,7 +224,7 @@ export class NavbarComponent implements OnInit {
     selectedDateRange(){
         const startDate = this.convertDateFormat(this.startDateInput.nativeElement.value);
         const endDate = this.convertDateFormat(this.endDateInput.nativeElement.value);
-        const pages = ['Sectos','Companies'];
+        const pages = ['Sectors','Companies'];
         if(pages.includes(this.getTitle())) {
             const search = this.searchItems.nativeElement.value;
             this.shareData.updateSharedData(this.getTitle() +":"+ startDate +":" + endDate + ":" + search);

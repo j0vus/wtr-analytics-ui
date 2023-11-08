@@ -37,7 +37,7 @@ export class UserProfileComponent implements OnInit {
       this.allSectors = res;
       let searchList = [...res];
       this.sector=res[0];
-      let uri = this.util.uriPath(null, res[0].jindustryId, 'industryId');
+      let uri = this.util.uriPath(null, res[0].jindustryId, 'sectorId');
       this.apiService.getOnlyJson(AppConsts.sectorDetails + uri).subscribe((data)=>{
       this.sectorDetails=data;
       });
@@ -54,7 +54,7 @@ export class UserProfileComponent implements OnInit {
       if(sector.industryName.toLowerCase() == searchItem.toLowerCase()){
         sectorId = sector.jindustryId;
         this.sector = sector;
-        let uri = this.util.uriPath(dateRange,sectorId,'industryId');
+        let uri = this.util.uriPath(dateRange,sectorId,'sectorId');
         this.apiService.getOnlyJson(AppConsts.sectorDetails + uri).subscribe((res)=>{
         this.sectorDetails=res;
         });
