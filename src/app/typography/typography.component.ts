@@ -1,21 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { ColDef } from 'ag-grid-community';
+import { CellClickedEvent, ColDef, GridReadyEvent } from 'ag-grid-community';
 import { AppConsts } from 'app/core/constants/appConstants';
 import { ApiService } from 'app/core/services/api/api.service';
 import { SharedDataService } from 'app/core/services/shared/shared-data.service';
+import { Observable } from 'rxjs';
+import { AgGridAngular } from 'ag-grid-angular';
+import { HttpClient } from '@angular/common/http';
+import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+
 
 @Component({
   selector: 'app-typography',
   templateUrl: './typography.component.html',
   styleUrls: ['./typography.component.css']
+
 })
 export class TypographyComponent implements OnInit {
 
   dateRange: string = null;  
 
   visitorData:any;
-  constructor(private apiService: ApiService, private shareDate: SharedDataService, private route: Router) {
+  constructor(private apiService: ApiService, private shareDate: SharedDataService, private route: Router,private http: HttpClient) {
     this.shareDate.sharedData$.subscribe((data) => {
       this.dateRange = data;
       if(this.dateRange != null && this.dateRange.split(":")[0] === 'Visitors'){   
@@ -23,6 +29,7 @@ export class TypographyComponent implements OnInit {
         let uri = this.uriPath(this.dateRange);
         this.apiService.getOnlyJson(AppConsts.visitorsData + uri).subscribe((res)=>{
         this.visitorData=res;
+        this.pagination();
         });
       }
       
@@ -33,6 +40,7 @@ export class TypographyComponent implements OnInit {
     let uri = this.uriPath(null);
     this.apiService.getOnlyJson(AppConsts.visitorsData + uri).subscribe((res)=>{
       this.visitorData=res;
+      this.pagination();
       });
     this.shareDate.showSearchBox(false);  
   }
@@ -70,6 +78,33 @@ export class TypographyComponent implements OnInit {
   onVisitorClick(visitorID: string) {
     this.route.navigate(['/visitor', visitorID]);
   }
+
+  public pageItems;
+  public pageSlice;
+  pagination(){
+    this.pageItems=this.visitorData;
+    this.pageSlice=this.pageItems.slice(0,10);
+  }  
+
+  pageSize;
+  OnPageChange(event: PageEvent){
+    console.log(event);
+    if(this.pageSize !== event.pageSize){
+      // window.scroll(0,0);
+      // window.scrollTo(0, 0);
+      // document.documentElement.scrollTop = 200; // Scroll to the top of the document's content
+      requestAnimationFrame(() => {
+        document.documentElement.scrollTop = 200;
+      });
   
+    }
+    this.pageSize=event.pageSize;
+    const startIndex = event.pageIndex * event.pageSize;
+    let endIndex = startIndex + event.pageSize;
+    if(endIndex > this.pageItems.length){
+      endIndex = this.pageItems.length;
+    }
+    this.pageSlice = this.pageItems.slice(startIndex, endIndex);
+  }
 
 }

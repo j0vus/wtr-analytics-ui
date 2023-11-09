@@ -18,9 +18,10 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import { GoogleChartsModule } from 'angular-google-charts';
-import { AgGridModule } from 'ag-grid-angular';
 import { TopographyDetailsComponent } from 'app/typography/topography-details/topography-details.component';
 import { DateFormatPipe } from 'app/typography/topography-details/date-format-pipe.pipe';
+import { AgGridModule } from 'ag-grid-angular';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -38,6 +39,7 @@ import { DateFormatPipe } from 'app/typography/topography-details/date-format-pi
     MatTooltipModule,
     GoogleChartsModule,
     AgGridModule,
+    MatPaginatorModule
   ],
   declarations: [
     DashboardComponent,

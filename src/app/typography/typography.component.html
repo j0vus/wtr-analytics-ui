@@ -1,5 +1,6 @@
 <div class="main-content">
   <div class="container-fluid">
+
       <div class="row">
           <!-- <div class="col-md-12">
               <div class="card">
@@ -98,7 +99,7 @@
                                   </th>
                               </thead>
                               <tbody>
-                                  <tr *ngFor="let item of visitorData">
+                                  <tr *ngFor="let item of pageSlice">
                                       <td>
                                         <a (click)="onVisitorClick(item.visitorId)">{{ item.visitorId }}</a>                                      </td>
                                       <td>
@@ -121,6 +122,16 @@
                           </table>
                       </div>
                   </div>
+              </div>
+              <div>
+
+                <mat-paginator [length]="this.pageItems.length"
+                            [pageSize]="10"
+                            [pageSizeOptions]="[5, 10, 25, 100]"
+                            aria-label="Select page"
+                            (page)="OnPageChange($event)">
+                </mat-paginator>
+
               </div>
           </div>
       </div>
