@@ -4,6 +4,8 @@ import { AppConsts } from "app/core/constants/appConstants";
 import { ApiService } from "app/core/services/api/api.service";
 import { SharedDataService } from "app/core/services/shared/shared-data.service";
 import { utilityMethods } from "app/core/shared/utility";
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { finalize } from "rxjs";
 
 interface VisitorDataCurrent {
   currentSessionCount: number,
@@ -33,6 +35,8 @@ export class TopographyDetailsComponent implements OnInit {
     currentSessionDuration: "0",
   };
 
+  @BlockUI() blockUI: NgBlockUI;
+
   constructor(
     private apiService: ApiService,
     private route: ActivatedRoute,
@@ -57,10 +61,12 @@ export class TopographyDetailsComponent implements OnInit {
   }
 
   loadVisitorDetails(uri) {
+    this.blockUI.start('Loading... VisitorDetails');
     this.route.params.subscribe((params) => {
       let visitorId = params["id"];
       this.apiService
-        .getOnlyJson(AppConsts.sessionDetails + uri + `&visitorId=` + visitorId)
+        .getOnlyJson(AppConsts.sessionDetails + uri + `&visitorId=` + visitorId).pipe(
+          finalize(() => this.blockUI.stop()))
         .subscribe((res: any) => {
           this.visitorSession = res?.visitorSession;
           this.visitorCurrentData.currentPageViewCount =

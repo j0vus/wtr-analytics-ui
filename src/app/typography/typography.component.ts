@@ -7,6 +7,8 @@ import { SharedDataService } from 'app/core/services/shared/shared-data.service'
 import { HttpClient } from '@angular/common/http';
 import {PageEvent} from '@angular/material/paginator';
 import { utilityMethods } from 'app/core/shared/utility';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-typography',
@@ -21,13 +23,17 @@ export class TypographyComponent implements OnInit {
   public pageSlice;
   visitorData:any;
   util:utilityMethods;
+  @BlockUI() blockUI: NgBlockUI;
+
   constructor(private apiService: ApiService, private shareDate: SharedDataService, private route: Router,private http: HttpClient) {
     this.util= new utilityMethods();
     this.shareDate.sharedData$.subscribe((data) => {
       this.dateRange = data;
       if(this.dateRange != null && this.dateRange.split(":")[0] === 'Visitors'){   
         let uri = this.util.uriPath(this.dateRange);
-        this.apiService.getOnlyJson(AppConsts.visitorsData + uri).subscribe((res)=>{
+        this.blockUI.start('Loading... Visitors');
+        this.apiService.getOnlyJson(AppConsts.visitorsData + uri).pipe(
+          finalize(() => this.blockUI.stop())).subscribe((res)=>{
         this.visitorData=res;
         this.pagination();
         });
@@ -37,12 +43,13 @@ export class TypographyComponent implements OnInit {
   }
    
   ngOnInit() {
+    this.blockUI.start('Loading... Visitors');
     let uri = this.util.uriPath(null);
-    this.apiService.getOnlyJson(AppConsts.visitorsData + uri).subscribe((res)=>{
+    this.apiService.getOnlyJson(AppConsts.visitorsData + uri).pipe(
+      finalize(() => this.blockUI.stop())).subscribe((res)=>{
       this.visitorData=res;
       this.pagination();
       });
-    // this.shareDate.showSearchBox(false);  
   }
   
   onVisitorClick(visitorID: string) {

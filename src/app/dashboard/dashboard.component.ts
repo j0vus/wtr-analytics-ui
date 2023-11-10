@@ -8,9 +8,11 @@ import {
   IChartProps,
 } from "./dashboard-gogl-chart-data";
 import { DashBoardChartData } from "./dashboard-chart-data";
-import { Subject, Subscription, first, interval, takeUntil } from "rxjs";
+import { Subject, Subscription, finalize, first, interval, takeUntil } from "rxjs";
 import { AppConsts } from "app/core/constants/appConstants";
 import { utilityMethods } from "app/core/shared/utility";
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+
 
 @Component({
   selector: "app-dashboard",
@@ -32,6 +34,9 @@ export class DashboardComponent implements OnInit {
   mostVisitedocByCountry: any;
   util: utilityMethods;
 
+  @BlockUI() blockUI: NgBlockUI;
+
+
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiService,
@@ -48,12 +53,15 @@ export class DashboardComponent implements OnInit {
         this.dateRange.split(":")[0] === "Dashboard"
       ) {
         let uri = this.util.uriPath(this.dateRange);
+        this.blockUI.start();
         this.apiService
-          .getOnlyJson(AppConsts.mostViewedDocByCountry + uri)
+          .getOnlyJson(AppConsts.mostViewedDocByCountry + uri).pipe(
+            finalize(() => this.blockUI.stop())
+            )
           .subscribe((res) => {
             this.mostVisitedocByCountry = res;
           });
-
+        
         if (this.isGChart) {
           this.initGCharts(this.dateRange);
         }
@@ -78,6 +86,7 @@ export class DashboardComponent implements OnInit {
       .getOnlyJson(AppConsts.mostViewedDocByCountry + uri)
       .subscribe((res) => {
         this.mostVisitedocByCountry = res;
+        // this.blockUI.stop();
       });
   }
 
@@ -98,6 +107,7 @@ export class DashboardComponent implements OnInit {
   }
 
   initGCharts(dateRange: string) {
+    this.blockUI.start('Loading... Charts');
     let uri = this.util.uriPath(dateRange);
 
     this.gChartsData.initIndustryVisitChart(uri);
@@ -184,6 +194,7 @@ export class DashboardComponent implements OnInit {
       this.mainChartVisitor.options
     );
 
+    this.blockUI.stop();
     this.gChartsData.allChartsDataMap.clear();
   }
 

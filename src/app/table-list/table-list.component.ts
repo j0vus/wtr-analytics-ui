@@ -3,6 +3,9 @@ import { AppConsts } from "app/core/constants/appConstants";
 import { ApiService } from "app/core/services/api/api.service";
 import { SharedDataService } from "app/core/services/shared/shared-data.service";
 import { utilityMethods } from "app/core/shared/utility";
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { finalize } from 'rxjs/operators';
+
 
 @Pipe({
   name: "nullToZero",
@@ -55,6 +58,8 @@ export class TableListComponent implements OnInit {
   issuer: any;
   issuerDetails: any;
   util: utilityMethods;
+  @BlockUI() blockUI: NgBlockUI;
+
   constructor(
     private apiService: ApiService,
     private shareDate: SharedDataService
@@ -72,32 +77,39 @@ export class TableListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.apiService.getOnlyJson(AppConsts.issuersAll).subscribe((res) => {
+    this.blockUI.start('Loading... Companies');
+    this.apiService.getOnlyJson(AppConsts.issuersAll).pipe(
+      finalize(() => this.blockUI.stop())).subscribe((res) => {
       this.allActiveCompanies = res;
       let searchList = [...res];
       this.issuer = res[0];
       let uri = this.util.uriPath(null, res[0].jissuerId, "issuerId");
+      this.blockUI.start('Loading... CompanyDetails');
       this.apiService
-        .getOnlyJson(AppConsts.issuerDetails + uri)
+        .getOnlyJson(AppConsts.issuerDetails + uri).pipe(
+          finalize(() => this.blockUI.stop()))
         .subscribe((data) => {
           this.issuerDetails = data;
         });
       searchList.unshift("issuer");
       this.shareDate.updateSearchItems(searchList);
     });
+    
   }
 
   loadCompanies(dateRange: string) {
+   
     let searchItem = dateRange.split(":")[3];
     let issuerId: number;
-
+    this.blockUI.start('Loading... CompanyDetails');
     for (let activeComapany of this.allActiveCompanies) {
       if (activeComapany.issuerName.toLowerCase() == searchItem.toLowerCase()) {
         issuerId = activeComapany.jissuerId;
         this.issuer = activeComapany;
         let uri = this.util.uriPath(dateRange, issuerId, "issuerId");
         this.apiService
-          .getOnlyJson(AppConsts.issuerDetails + uri)
+          .getOnlyJson(AppConsts.issuerDetails + uri).pipe(
+            finalize(() => this.blockUI.stop()))
           .subscribe((data) => {
             this.issuerDetails = data;
           });

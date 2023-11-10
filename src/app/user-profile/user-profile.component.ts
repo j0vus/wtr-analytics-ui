@@ -3,6 +3,9 @@ import { AppConsts } from 'app/core/constants/appConstants';
 import { ApiService } from 'app/core/services/api/api.service';
 import { SharedDataService } from 'app/core/services/shared/shared-data.service';
 import { utilityMethods } from 'app/core/shared/utility';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { finalize } from 'rxjs/operators';
+
 
 
 
@@ -19,12 +22,15 @@ export class UserProfileComponent implements OnInit {
   sector:any;
   sectorDetails:any;
   util:utilityMethods;
+  @BlockUI() blockUI: NgBlockUI;
+
   constructor(private apiService: ApiService, private shareDate: SharedDataService) {
      this.util = new utilityMethods();
     this.shareDate.sharedData$.subscribe((data) => {
       this.dateRange = data;
       if(this.dateRange != null && this.dateRange.split(":")[0] === 'Sectors'){   
-        console.log(this.dateRange);
+        
+        this.blockUI.start('Loading... SectorDetails');
         this.loadSectors(this.dateRange);
       }
     
@@ -32,16 +38,23 @@ export class UserProfileComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.apiService.getOnlyJson(AppConsts.sectorsAll).subscribe((res)=>{
+    this.blockUI.start('Loading... Sectors');
+    this.apiService.getOnlyJson(AppConsts.sectorsAll).pipe(
+      finalize(()=>{this.blockUI.stop()})
+    ).subscribe((res)=>{
       this.allSectors = res;
       let searchList = [...res];
       this.sector=res[0];
       let uri = this.util.uriPath(null, res[0].jindustryId, 'sectorId');
-      this.apiService.getOnlyJson(AppConsts.sectorDetails + uri).subscribe((data)=>{
+      this.blockUI.start('Loading... SectorDetails');
+      this.apiService.getOnlyJson(AppConsts.sectorDetails + uri).pipe(
+        finalize(() => this.blockUI.stop())
+      ).subscribe((data)=>{
       this.sectorDetails=data;
-      });
+      }); 
       searchList.unshift("industry");
       this.shareDate.updateSearchItems(searchList);
+      
      });
   }
 
@@ -54,7 +67,8 @@ export class UserProfileComponent implements OnInit {
         sectorId = sector.jindustryId;
         this.sector = sector;
         let uri = this.util.uriPath(dateRange,sectorId,'sectorId');
-        this.apiService.getOnlyJson(AppConsts.sectorDetails + uri).subscribe((res)=>{
+        this.apiService.getOnlyJson(AppConsts.sectorDetails + uri).pipe(
+          finalize(() => this.blockUI.stop())).subscribe((res)=>{
         this.sectorDetails=res;
         });
       }

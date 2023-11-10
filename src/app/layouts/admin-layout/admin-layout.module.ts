@@ -39,7 +39,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatTooltipModule,
     GoogleChartsModule,
     AgGridModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+
   ],
   declarations: [
     DashboardComponent,

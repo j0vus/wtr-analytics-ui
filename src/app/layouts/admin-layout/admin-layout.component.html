@@ -5,6 +5,8 @@
     </div>
     <div class="main-panel">
         <app-navbar></app-navbar>
+        <block-ui message="Loading....  Please Wait..."></block-ui>
+        <!-- <block-ui></block-ui> -->
         <router-outlet></router-outlet>
         <div *ngIf="isMaps('maps')">
             <app-footer></app-footer>

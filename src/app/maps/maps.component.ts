@@ -3,6 +3,8 @@ import { AppConsts } from "app/core/constants/appConstants";
 import { ApiService } from "app/core/services/api/api.service";
 import { SharedDataService } from "app/core/services/shared/shared-data.service";
 import { utilityMethods } from "app/core/shared/utility";
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { finalize } from "rxjs";
 
 declare const google: any;
 
@@ -21,6 +23,7 @@ export class MapsComponent implements OnInit {
   worldMap: any[] = [];
   dateRange: string = null;
   util: utilityMethods;
+  @BlockUI() blockUI: NgBlockUI;
   constructor(
     private apiService: ApiService,
     private shareDate: SharedDataService
@@ -47,6 +50,7 @@ export class MapsComponent implements OnInit {
   }
 
   drawRegionsMap(dateRange) {
+    this.blockUI.start('Loading... Map');
     let util = new utilityMethods();
     let uri: string;
     if (dateRange != null) {
@@ -56,7 +60,8 @@ export class MapsComponent implements OnInit {
     }
 
     this.apiService
-      .getOnlyJson(AppConsts.visitorsCountByCountry + uri)
+      .getOnlyJson(AppConsts.visitorsCountByCountry + uri).pipe(
+        finalize(() => this.blockUI.stop()))
       .subscribe((res) => {
         this.worldMap = res;
         let data = [];
