@@ -11,7 +11,9 @@
                     <div class="row">
                         <div class="col-md-9 company-name">{{issuer?.issuerName}}</div>
                   
-                        <div class="col-md-3 company-logo text-center" > <img style="width: 80%; height: 60px;" [src]="issuer?.logoURL"/></div>
+                        <div class="col-md-3 company-logo text-center" > 
+                          <img *ngIf="issuer !== undefined" style="width: 80%; height: 60px;" [src]="issuer?.logoURL"/>
+                        </div>
 
                     </div>
 
