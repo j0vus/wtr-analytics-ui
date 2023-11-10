@@ -76,9 +76,7 @@ export class ApiService {
     this.getHeader();
     return this.http.delete(environment.apiUrl + apiEndPoint, this.options).pipe(catchError(async (error) => this.handleError(error)));
   }
-  getDocData(docId: any) {
-    return this.http.get(`https://chart.sandboxjovus.co.in/ga4/htmlreport/v1/gethtmldata?fileName=${docId}`)
-  }
+  
   private handleError(error: HttpErrorResponse) {
     if (error?.status == 401) {
       this.authService.isLoggedInSubject.next(false);

@@ -9,3 +9,8 @@
 .cardbg{ padding: 15x; color: #fff;}
 .cardbg h4{ color: #fff; padding: 20px 0 0 15px;}
 .cardbg p{ padding: 0px 0 0 15px;}
+
+.img-style{
+    width: 80%;
+    height: 60px;
+}

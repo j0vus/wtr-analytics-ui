@@ -14,8 +14,8 @@ export class SharedDataService {
   private searchItems = new BehaviorSubject<any>(null);
   sharedSearchItems$ = this.searchItems.asObservable();
 
-  private searchBox = new BehaviorSubject<any>(null);
-  searchBoxShow$ = this.searchBox.asObservable();
+  // private searchBox = new BehaviorSubject<any>(null);
+  // searchBoxShow$ = this.searchBox.asObservable();
 
 
   updateSharedData(data: any) {
@@ -26,9 +26,9 @@ export class SharedDataService {
     this.searchItems.next(data);
   }
 
-  showSearchBox(data:any){
-   this.searchBox.next(data);
-  }
+  // showSearchBox(data:any){
+  //  this.searchBox.next(data);
+  // }
 
 
 }

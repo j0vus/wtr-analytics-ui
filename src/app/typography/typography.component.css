@@ -1,0 +1,7 @@
+
+::ng-deep .mat-paginator-page-size-label { color: black; font-weight: bold; }
+::ng-deep .mat-paginator-range-label { color: black; font-weight: bold; }
+::ng-deep .mat-paginator-icon{ color: black; font-weight: bold; }
+::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow { color: red; } 
+::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-value { font-weight: bold; color: black; } 
+  

@@ -1,123 +1,97 @@
 <div class="main-content">
   <div class="container-fluid">
-     <div class="row mx-1">
-        <div class="card card-chart m">
-            
-
-            <div class="mb-4 mt-4 ">
-                <div class="row">
-                    <div class="col-md-6 pl-4">
-                        Visitors
-                    </div>
-                </div>    
-            </div>
-             <div *ngIf="isGChart"  id="mainChartVisitor"></div>
-
-             <div *ngIf="isChartish"  id="mainChartVisitor"></div>
-
-        </div>
-
-     </div>
-    
-    <div class="row">
-       <h3>Sectors</h3>
-      </div>
-              <div class="card card-chart">
-                    
-                <div *ngIf="isGChart" class="ct-chart" id="sectorVisitChart"></div>
-
-                  <div *ngIf="isChartish" class="card-header card-header-success blue-clr">
-                      <div class="ct-chart" id="sectorVisitChart"></div>
-
-                  </div>
-                  <div class="card-body">
-                      <h4 class="card-title">Total Visitors</h4>
-                      
-                  </div>
-               
-              </div>
-              <div class="card card-chart">
-                <div *ngIf="isGChart" class="ct-chart" id="sectorTimeChart"></div>
-                  <div *ngIf="isChartish" class="card-header card-header-warning darkblue-clr">
-                      <div class="ct-chart" id="sectorTimeChart"></div>
-            
-                  </div>
-                  <div class="card-body">
-                      <h4 class="card-title">Average engagement time</h4>
-                      
-                  </div>
-    
-              </div>
-
-
-      <div class="row">
-        <h3>Companies</h3>
-       </div>
-       <div class="row">
-       
-           <div class="col-md-6">
-                
-
-                <div  class="card card-chart">
-                <div *ngIf="isGChart" class="ct-chart" id="companyVisitedChart"></div>
-
-                    <div  *ngIf="isChartish" class="card-header card-header-danger">
-                        <div class="ct-chart" id="companyVisitedChart"></div>
- 
-                    </div>
-                    <div class="card-body">
-                        <h4 class="card-title">Website Views</h4>
-                      
-                    </div>
-                   
-                </div>
-            
-           </div>
-           <div class="col-md-6">
-               <div class="card card-chart">
-
-                <div *ngIf="isGChart" class="ct-chart" id="companyTimeChart"></div>
-
-                   <div *ngIf="isChartish" class="card-header card-header-danger">
-                       <div class="ct-chart" id="companyTimeChart"></div>
-
-                   </div>
-                   <div class="card-body">
-                       <h4 class="card-title">Average Engagement Time</h4>
-                     
-                   </div>
-                  
-               </div>
-           </div>
-       </div>
-
-
-      <div class="row">
-        
-          <div class="col-lg-12 col-md-12">
-              <div class="card">
-                 
-                  <div class="card-body table-responsive">
-                      <table class="table table-hover">
-                          <thead class="text-blue">
-                              <th>Country</th>
-                              <th>Visitors</th>
-                              <th>Most Visited Documents</th>
-                              <th>Most Viewed City</th>
-                          </thead>
-                          <tbody>
-                              <tr *ngFor="let item of mostVisitedocByCountry">
-                                  <td>{{item.country}}</td>
-                                  <td>{{item.countryVisitCount}} </td>
-                                  <td>{{item.docId}}</td>
-                                  <td>{{item.city}}</td>
-                              </tr>
-                          </tbody>
-                      </table>
-                  </div>
-              </div>
+    <div class="row mx-1">
+      <div class="card card-chart m">
+        <div class="mb-4 mt-4">
+          <div class="row">
+            <div class="col-md-6 pl-4">Visitors</div>
           </div>
+        </div>
+        <div *ngIf="isGChart" id="mainChartVisitor"></div>
+
+        <div *ngIf="isChartish" id="mainChartVisitor"></div>
       </div>
+    </div>
+
+    <div class="row">
+      <h3>Sectors</h3>
+    </div>
+    <div class="card card-chart">
+      <div *ngIf="isGChart" class="ct-chart" id="sectorVisitChart"></div>
+
+      <div *ngIf="isChartish" class="card-header card-header-success blue-clr">
+        <div class="ct-chart" id="sectorVisitChart"></div>
+      </div>
+      <div class="card-body">
+        <h4 class="card-title">Total Visitors</h4>
+      </div>
+    </div>
+    <div class="card card-chart">
+      <div *ngIf="isGChart" class="ct-chart" id="sectorTimeChart"></div>
+      <div
+        *ngIf="isChartish"
+        class="card-header card-header-warning darkblue-clr"
+      >
+        <div class="ct-chart" id="sectorTimeChart"></div>
+      </div>
+      <div class="card-body">
+        <h4 class="card-title">Average engagement time</h4>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3>Companies</h3>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card card-chart">
+          <div *ngIf="isGChart" class="ct-chart" id="companyVisitedChart"></div>
+
+          <div *ngIf="isChartish" class="card-header card-header-danger">
+            <div class="ct-chart" id="companyVisitedChart"></div>
+          </div>
+          <div class="card-body">
+            <h4 class="card-title">Website Views</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card card-chart">
+          <div *ngIf="isGChart" class="ct-chart" id="companyTimeChart"></div>
+
+          <div *ngIf="isChartish" class="card-header card-header-danger">
+            <div class="ct-chart" id="companyTimeChart"></div>
+          </div>
+          <div class="card-body">
+            <h4 class="card-title">Average Engagement Time</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <div class="card">
+          <div class="card-body table-responsive">
+            <table class="table table-hover">
+              <thead class="text-blue">
+                <th>Country</th>
+                <th>Visitors</th>
+                <th>Most Visited Documents</th>
+                <th>Most Viewed City</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of mostVisitedocByCountry">
+                  <td>{{ item.country }}</td>
+                  <td>{{ item.countryVisitCount }}</td>
+                  <td>{{ item.docId }}</td>
+                  <td>{{ item.city }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  
 </div>

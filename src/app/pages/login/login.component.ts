@@ -14,7 +14,6 @@ export class LoginComponent extends AppComponentBase implements OnInit {
   logInForm!: FormGroup;
   submited: Boolean = false;
   submitedInValid: Boolean = false;
-  // @BlockUI() blockUI!: NgBlockUI;
   returnUrl: any;
   constructor(injector: Injector, private router: Router, private route: ActivatedRoute) {
 

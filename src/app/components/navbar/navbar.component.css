@@ -1,34 +1,24 @@
 .cus-btn-secondary.cus-rounded-pill {
-    /* Background color and text color */
     background-color: #6c757d;
     color: #fff;
-
-    /* Border */
-    border: 2px solid #6c757d;
-    border-radius: 50px; /* This creates the rounded-pill shape */
-
-    /* Padding */
-    padding: 0.5rem 1rem; /* Adjust padding as needed */
-
-    /* Hover state */
+    border: 2px solid hsl(208, 7%, 46%);
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
     transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .cus-btn-secondary.cus-rounded-pill:hover {
-    background-color: #5a6268; /* Change the background color on hover */
-    border-color: #545b62; /* Change the border color on hover */
-    color: #fff; /* Change text color on hover */
+    background-color: #5a6268;
+    border-color: #545b62;
+    color: #fff;
 }
 
-/* You can customize these styles further as needed */
 
 
-
-.search-items{
+.search-items {
     box-sizing: border-box;
     position: absolute;
     z-index: 999;
-    /* background-color: white; */
     background-color: rgba(255, 255, 255, 1);
 }
 
@@ -37,18 +27,19 @@ ul {
     list-style: none;
     padding-left: 3%;
     font-weight: bold;
-    
-  }
+
+}
+
 li {
     margin-top: 10px;
     margin-bottom: 10px;
-}  
+}
 
 .scrollable-list {
-    max-height: 200px; 
+    max-height: 200px;
     overflow-y: auto;
-  }
-  
+}
+
 
 .scrollable-list::-webkit-scrollbar-button {
     display: none;
@@ -59,15 +50,15 @@ li {
 }
 
 .scrollable-list::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.5); 
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .scrollable-list::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.5); 
+    background: rgba(0, 0, 0, 0.5);
 }
 
 .scrollable-list::-webkit-scrollbar-corner {
     background: transparent;
-    border-radius: 10px; 
+    border-radius: 10px;
 
 }
