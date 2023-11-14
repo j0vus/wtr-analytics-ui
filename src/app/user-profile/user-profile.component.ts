@@ -62,6 +62,9 @@ export class UserProfileComponent implements OnInit {
     
     let searchItem = dateRange.split(":")[3];
     let sectorId:number;
+    if(searchItem  === ""){
+      searchItem=this.sector.industryName;
+    }
     for(let sector of this.allSectors){
       if(sector.industryName.toLowerCase() == searchItem.toLowerCase()){
         sectorId = sector.jindustryId;
@@ -72,6 +75,7 @@ export class UserProfileComponent implements OnInit {
         this.sectorDetails=res;
         });
       }
+      
     }    
    }
 }

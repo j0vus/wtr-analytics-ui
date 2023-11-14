@@ -101,6 +101,9 @@ export class TableListComponent implements OnInit {
    
     let searchItem = dateRange.split(":")[3];
     let issuerId: number;
+    if(searchItem === ""){
+      searchItem=this.issuer.issuerName;
+    }
     this.blockUI.start('Loading... CompanyDetails');
     for (let activeComapany of this.allActiveCompanies) {
       if (activeComapany.issuerName.toLowerCase() == searchItem.toLowerCase()) {
